@@ -1,14 +1,14 @@
 import { component$ } from "@builder.io/qwik";
 import { DocumentHead, Form, Link } from "@builder.io/qwik-city";
 import { paths } from "~/utils/paths";
-import { signUpAction } from "../layout";
+import { signInAction } from "../layout";
 
 export default component$(() => {
-  const signUp = signUpAction.use();
+  const signIn = signInAction.use();
 
   return (
-    <Form class="flex flex-col gap-2" action={signUp}>
-      <h2 class="text-xl">Sign Up</h2>
+    <Form class="flex flex-col gap-2" action={signIn}>
+      <h2 class="text-xl">Sign In</h2>
 
       <div class="form-control w-full">
         <label for="email" class="label">
@@ -22,7 +22,7 @@ export default component$(() => {
           type="email"
         />
         <span>
-          {signUp.fail?.fieldErrors.email || signUp.value?.errors?.email}
+          {signIn.fail?.fieldErrors.email || signIn.value?.errors?.email}
         </span>
       </div>
 
@@ -37,18 +37,18 @@ export default component$(() => {
           type="password"
         />
         <span>
-          {signUp.fail?.fieldErrors.password || signUp.value?.errors?.password}
+          {signIn.fail?.fieldErrors.password || signIn.value?.errors?.password}
         </span>
       </div>
 
       <button class="btn btn-primary mt-2" type="submit">
-        Sign Up
+        Sign In
       </button>
-      <Link href={paths.signIn}>Sign In</Link>
+      <Link href={paths.signUp}>Sign Up</Link>
     </Form>
   );
 });
 
 export const head: DocumentHead = {
-  title: "Sign Up - Qwik TODO MVC",
+  title: "Sign In - Qwik TODO MVC",
 };
