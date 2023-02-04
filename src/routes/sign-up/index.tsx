@@ -1,7 +1,42 @@
 import { component$ } from "@builder.io/qwik";
-import { DocumentHead, Form, Link } from "@builder.io/qwik-city";
+import {
+  action$,
+  DocumentHead,
+  Form,
+  Link,
+  z,
+  zod$,
+} from "@builder.io/qwik-city";
+import { createSession } from "~/server/auth";
+import { getRequestContext } from "~/server/context";
+import { createUser, getUser } from "~/server/user";
 import { paths } from "~/utils/paths";
-import { signUpAction } from "../layout";
+
+export const signUpAction = action$(
+  async (data, event) => {
+    const ctx = getRequestContext(event);
+
+    const existing = await getUser({ ctx, email: data.email });
+
+    if (existing) {
+      event.status(400);
+      return {
+        errors: {
+          email: "A user already exists with this email",
+          password: null,
+        },
+      };
+    }
+
+    const user = await createUser({ ctx, ...data });
+
+    createSession(event, user.id);
+  },
+  zod$({
+    email: z.string().email(),
+    password: z.string(),
+  })
+);
 
 export default component$(() => {
   const signUp = signUpAction.use();

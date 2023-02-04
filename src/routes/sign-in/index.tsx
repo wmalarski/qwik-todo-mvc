@@ -1,7 +1,42 @@
 import { component$ } from "@builder.io/qwik";
-import { DocumentHead, Form, Link } from "@builder.io/qwik-city";
+import {
+  action$,
+  DocumentHead,
+  Form,
+  Link,
+  z,
+  zod$,
+} from "@builder.io/qwik-city";
+import { createSession } from "~/server/auth";
+import { getRequestContext } from "~/server/context";
+import { verifyLogin } from "~/server/user";
 import { paths } from "~/utils/paths";
-import { signInAction } from "../layout";
+
+export const signInAction = action$(
+  async (data, event) => {
+    const ctx = getRequestContext(event);
+
+    const user = await verifyLogin({ ctx, ...data });
+
+    if (!user) {
+      event.status(400);
+      return {
+        errors: {
+          email: "Invalid email or password",
+          password: null,
+        },
+      };
+    }
+
+    event.redirect(302, paths.todos);
+
+    createSession(event, user.id);
+  },
+  zod$({
+    email: z.string().email(),
+    password: z.string().min(6),
+  })
+);
 
 export default component$(() => {
   const signIn = signInAction.use();
