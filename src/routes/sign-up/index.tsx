@@ -10,7 +10,7 @@ import {
 } from "@builder.io/qwik-city";
 import { createSession } from "~/server/auth";
 import { getRequestContext } from "~/server/context";
-import { verifyLogin } from "~/server/user";
+import { createUser, getUser } from "~/server/user";
 import { paths } from "~/utils/paths";
 
 export const userLoader = loader$((event) => {
@@ -20,22 +20,24 @@ export const userLoader = loader$((event) => {
   }
 });
 
-export const signIn = action$(
+export const signUpAction = action$(
   async (data, event) => {
     const ctx = getRequestContext(event);
 
-    const user = await verifyLogin({ ctx, ...data });
+    const existing = await getUser({ ctx, email: data.email });
 
-    if (!user) {
+    if (existing) {
       event.status(400);
       return {
         errors: {
-          email: "Invalid email or password",
+          email: "A user already exists with this email",
           password: null,
         },
         status: "error",
       } as const;
     }
+
+    const user = await createUser({ ctx, ...data });
 
     createSession(event, user.id);
 
@@ -45,18 +47,18 @@ export const signIn = action$(
   },
   zod$({
     email: z.string().email(),
-    password: z.string().min(6),
+    password: z.string(),
   })
 );
 
 export default component$(() => {
   userLoader.use();
 
-  const action = signIn.use();
+  const action = signUpAction.use();
 
   return (
     <Form class="flex flex-col gap-2" action={action}>
-      <h2 class="text-xl">Sign In</h2>
+      <h2 class="text-xl">Sign Up</h2>
 
       {action.value?.status === "success" ? <span>Success</span> : null}
 
@@ -92,13 +94,13 @@ export default component$(() => {
       </div>
 
       <button class="btn btn-primary mt-2" type="submit">
-        Sign In
+        Sign Up
       </button>
-      <Link href={paths.signUp}>Sign Up</Link>
+      <Link href={paths.signIn}>Sign In</Link>
     </Form>
   );
 });
 
 export const head: DocumentHead = {
-  title: "Sign In - Qwik TODO MVC",
+  title: "Sign Up - Qwik TODO MVC",
 };

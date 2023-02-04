@@ -4,12 +4,14 @@ specifiers:
   '@builder.io/qwik': 0.17.4
   '@builder.io/qwik-city': 0.1.0-beta13
   '@prisma/client': 4.9.0
+  '@types/bcryptjs': ^2.4.2
   '@types/eslint': 8.21.0
   '@types/jsonwebtoken': ^9.0.1
   '@types/node': ^18.11.18
   '@types/node-fetch': latest
   '@typescript-eslint/eslint-plugin': 5.50.0
   '@typescript-eslint/parser': 5.50.0
+  bcryptjs: ^2.4.3
   eslint: 8.33.0
   eslint-config-prettier: ^8.6.0
   eslint-import-resolver-node: ^0.3.7
@@ -31,11 +33,13 @@ specifiers:
 
 dependencies:
   '@prisma/client': 4.9.0_prisma@4.9.0
+  bcryptjs: 2.4.3
   jsonwebtoken: 9.0.0
 
 devDependencies:
   '@builder.io/qwik': 0.17.4_undici@5.16.0
   '@builder.io/qwik-city': 0.1.0-beta13_@builder.io+qwik@0.17.4
+  '@types/bcryptjs': 2.4.2
   '@types/eslint': 8.21.0
   '@types/jsonwebtoken': 9.0.1
   '@types/node': 18.11.18
@@ -418,6 +422,10 @@ packages:
       '@types/estree': 1.0.0
     dev: true
 
+  /@types/bcryptjs/2.4.2:
+    resolution: {integrity: sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==}
+    dev: true
+
   /@types/debug/4.1.7:
     resolution: {integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==}
     dependencies:
@@ -759,6 +767,10 @@ packages:
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
+
+  /bcryptjs/2.4.3:
+    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
+    dev: false
 
   /brace-expansion/1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}

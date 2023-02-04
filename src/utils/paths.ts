@@ -1,4 +1,5 @@
 export const paths = {
-  home: "/",
+  signIn: "/",
+  signUp: "/sign-up",
   todos: "/todos",
 };

@@ -18,25 +18,25 @@ const options = {
 export const USER_SESSION_KEY = "__session";
 
 export const createSession = (
-  request: RequestEventLoader | RequestEvent,
+  event: RequestEventLoader | RequestEvent,
   userId: string
 ) => {
   const token = jwt.sign({ userId }, env.SESSION_SECRET, { expiresIn: "7d" });
 
-  request.cookie.set(USER_SESSION_KEY, token, {
+  event.cookie.set(USER_SESSION_KEY, token, {
     ...options,
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
 };
 
-export const deleteSession = (request: RequestEventLoader | RequestEvent) => {
-  request.cookie.delete(USER_SESSION_KEY);
+export const deleteSession = (event: RequestEventLoader | RequestEvent) => {
+  event.cookie.delete(USER_SESSION_KEY);
 };
 
 export const getSession = (
-  request: RequestEventLoader | RequestEvent
+  event: RequestEventLoader | RequestEvent
 ): Session | null => {
-  const token = request.cookie.get(USER_SESSION_KEY)?.value;
+  const token = event.cookie.get(USER_SESSION_KEY)?.value;
 
   if (!token) {
     return null;
@@ -49,7 +49,7 @@ export const getSession = (
 
     return { userId: session.toString() };
   } catch (err) {
-    deleteSession(request);
+    deleteSession(event);
     return null;
   }
 };

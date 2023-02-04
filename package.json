@@ -23,6 +23,7 @@
   "devDependencies": {
     "@builder.io/qwik": "0.17.4",
     "@builder.io/qwik-city": "0.1.0-beta13",
+    "@types/bcryptjs": "^2.4.2",
     "@types/eslint": "8.21.0",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.11.18",
@@ -49,6 +50,7 @@
   },
   "dependencies": {
     "@prisma/client": "4.9.0",
+    "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.0"
   }
 }
