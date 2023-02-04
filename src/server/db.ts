@@ -22,4 +22,3 @@ export type DbPrismaClient = typeof prisma;
 if (process.env.NODE_ENV !== "production" && typeof global !== "undefined") {
   global.prisma = prisma;
 }
-

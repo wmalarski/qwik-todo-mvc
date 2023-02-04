@@ -5,17 +5,16 @@ import { DbPrismaClient, prisma } from "./db";
 
 export type RequestContext = {
   prisma: DbPrismaClient;
-}
+};
 
 export type ProtectedRequestContext = {
   prisma: DbPrismaClient;
   session: Session;
-}
+};
 
 export const getRequestContext = (): RequestContext => {
   return { prisma };
 };
-
 
 export const getProtectedRequestContext = (
   event: RequestEventLoader | RequestEvent

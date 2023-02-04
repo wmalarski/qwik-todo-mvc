@@ -1,10 +1,10 @@
 import { RequestEvent, RequestEventLoader } from "@builder.io/qwik-city";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import { env } from "./env";
 
 export type Session = {
   userId: string;
-}
+};
 
 const options = {
   httpOnly: true,
@@ -19,21 +19,23 @@ export const USER_SESSION_KEY = "__session";
 
 export const createSession = (
   request: RequestEventLoader | RequestEvent,
-  userId: string,
+  userId: string
 ) => {
-  const token = jwt.sign({ userId }, env.SESSION_SECRET, {expiresIn: "7d"});
+  const token = jwt.sign({ userId }, env.SESSION_SECRET, { expiresIn: "7d" });
 
   request.cookie.set(USER_SESSION_KEY, token, {
     ...options,
-    maxAge: 60 * 60 * 24 * 7 // 7 days
+    maxAge: 60 * 60 * 24 * 7, // 7 days
   });
-}
+};
 
 export const deleteSession = (request: RequestEventLoader | RequestEvent) => {
   request.cookie.delete(USER_SESSION_KEY);
-}
+};
 
-export const getSession = (request: RequestEventLoader | RequestEvent): Session | null => {
+export const getSession = (
+  request: RequestEventLoader | RequestEvent
+): Session | null => {
   const token = request.cookie.get(USER_SESSION_KEY)?.value;
 
   if (!token) {
@@ -46,9 +48,8 @@ export const getSession = (request: RequestEventLoader | RequestEvent): Session 
     console.log({ session });
 
     return { userId: session.toString() };
-  } catch(err) {
+  } catch (err) {
     deleteSession(request);
     return null;
   }
-}
-
+};
