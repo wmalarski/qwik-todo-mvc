@@ -54,13 +54,13 @@ export const signUpAction = action$(
 export default component$(() => {
   userLoader.use();
 
-  const action = signUpAction.use();
+  const signUp = signUpAction.use();
 
   return (
-    <Form class="flex flex-col gap-2" action={action}>
+    <Form class="flex flex-col gap-2" action={signUp}>
       <h2 class="text-xl">Sign Up</h2>
 
-      {action.value?.status === "success" ? <span>Success</span> : null}
+      {signUp.value?.status === "success" ? <span>Success</span> : null}
 
       <div class="form-control w-full">
         <label for="email" class="label">
@@ -74,7 +74,7 @@ export default component$(() => {
           type="email"
         />
         <span>
-          {action.fail?.fieldErrors.email || action.value?.errors?.email}
+          {signUp.fail?.fieldErrors.email || signUp.value?.errors?.email}
         </span>
       </div>
 
@@ -89,7 +89,7 @@ export default component$(() => {
           type="password"
         />
         <span>
-          {action.fail?.fieldErrors.password || action.value?.errors?.password}
+          {signUp.fail?.fieldErrors.password || signUp.value?.errors?.password}
         </span>
       </div>
 

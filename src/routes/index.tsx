@@ -15,12 +15,13 @@ import { paths } from "~/utils/paths";
 
 export const userLoader = loader$((event) => {
   const ctx = getRequestContext(event);
+
   if (ctx.session) {
     event.redirect(302, paths.todos);
   }
 });
 
-export const signIn = action$(
+export const signInAction = action$(
   async (data, event) => {
     const ctx = getRequestContext(event);
 
@@ -52,13 +53,13 @@ export const signIn = action$(
 export default component$(() => {
   userLoader.use();
 
-  const action = signIn.use();
+  const signIn = signInAction.use();
 
   return (
-    <Form class="flex flex-col gap-2" action={action}>
+    <Form class="flex flex-col gap-2" action={signIn}>
       <h2 class="text-xl">Sign In</h2>
 
-      {action.value?.status === "success" ? <span>Success</span> : null}
+      {signIn.value?.status === "success" ? <span>Success</span> : null}
 
       <div class="form-control w-full">
         <label for="email" class="label">
@@ -72,7 +73,7 @@ export default component$(() => {
           type="email"
         />
         <span>
-          {action.fail?.fieldErrors.email || action.value?.errors?.email}
+          {signIn.fail?.fieldErrors.email || signIn.value?.errors?.email}
         </span>
       </div>
 
@@ -87,7 +88,7 @@ export default component$(() => {
           type="password"
         />
         <span>
-          {action.fail?.fieldErrors.password || action.value?.errors?.password}
+          {signIn.fail?.fieldErrors.password || signIn.value?.errors?.password}
         </span>
       </div>
 

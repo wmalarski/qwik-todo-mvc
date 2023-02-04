@@ -4,6 +4,8 @@ import { env } from "./env";
 
 export type Session = {
   userId: string;
+  iat: number;
+  exp: number;
 };
 
 const options = {
@@ -30,7 +32,7 @@ export const createSession = (
 };
 
 export const deleteSession = (event: RequestEventLoader | RequestEvent) => {
-  event.cookie.delete(USER_SESSION_KEY);
+  event.cookie.delete(USER_SESSION_KEY, options);
 };
 
 export const getSession = (
@@ -44,10 +46,7 @@ export const getSession = (
 
   try {
     const session = jwt.verify(token, env.SESSION_SECRET);
-
-    console.log({ session });
-
-    return { userId: session.toString() };
+    return session as Session;
   } catch (err) {
     deleteSession(event);
     return null;
