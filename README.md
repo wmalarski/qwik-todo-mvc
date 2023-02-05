@@ -1,12 +1,18 @@
-# Qwik City App ⚡️
+# Qwik City - TODO MVC ⚡️
 
-- [Qwik Docs](https://qwik.builder.io/)
-- [Discord](https://qwik.builder.io/chat)
-- [Qwik GitHub](https://github.com/BuilderIO/qwik)
-- [@QwikDev](https://twitter.com/QwikDev)
-- [Vite](https://vitejs.dev/)
+![image info](./docs/preview.png)
 
----
+## TODO List
+
+- [x] Simple email+password authorization
+- [x] Cookie session management
+- [x] Prisma+Postgresql integration
+- [x] Using `loader$` and `action$`(with `zod$` validation)
+- [x] Filtering todo list
+- [x] Listing and updating todos
+- [ ] Optimistic updates
+- [ ] Check no JS
+- [ ] Docker Deployment
 
 ## Project Structure
 

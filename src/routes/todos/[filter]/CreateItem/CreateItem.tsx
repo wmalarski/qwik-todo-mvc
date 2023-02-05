@@ -12,7 +12,7 @@ export const CreateItem = component$<Props>((props) => {
 
   return (
     <>
-      <Form action={props.action}>
+      <Form action={props.action} spaReset>
         <input
           class="new-todo"
           placeholder="What needs to be done?"
