@@ -2,7 +2,12 @@ import { component$, Slot, useStylesScoped$ } from "@builder.io/qwik";
 import { action$, loader$, z, zod$ } from "@builder.io/qwik-city";
 import { deleteSession } from "~/server/auth";
 import { getProtectedRequestContext } from "~/server/context";
-import { completeAllTodos, countTodos, createTodo } from "~/server/todos";
+import {
+  completeAllTodos,
+  countTodos,
+  createTodo,
+  deleteCompletedTodos,
+} from "~/server/todos";
 import { paths } from "~/utils/paths";
 import { CheckAll } from "./CheckAll/CheckAll";
 import { CreateItem } from "./CreateItem/CreateItem";
@@ -21,7 +26,7 @@ export const signOutAction = action$((_data, event) => {
   event.redirect(302, paths.signIn);
 });
 
-export const createTodoAction = action$(
+export const createAction = action$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -32,7 +37,7 @@ export const createTodoAction = action$(
   })
 );
 
-export const completeAllTodosAction = action$(
+export const completeAllAction = action$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -42,6 +47,12 @@ export const completeAllTodosAction = action$(
     complete: z.coerce.boolean(),
   })
 );
+
+export const deleteCompletedAction = action$(async (_data, event) => {
+  const ctx = getProtectedRequestContext(event);
+
+  await deleteCompletedTodos({ ctx });
+});
 
 export default component$(() => {
   useStylesScoped$(styles);

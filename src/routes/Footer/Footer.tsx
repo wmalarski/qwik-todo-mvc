@@ -9,9 +9,11 @@ export const Footer = component$(() => {
   const signOut = signOutAction.use();
 
   return (
-    <footer>
+    <footer class="footer">
       <Form action={signOut}>
-        <button>Sign Out</button>
+        <button class="signOut" type="submit">
+          Sign Out
+        </button>
       </Form>
       <a href="https://www.builder.io/" target="_blank">
         Made with ♡ by wmalarski

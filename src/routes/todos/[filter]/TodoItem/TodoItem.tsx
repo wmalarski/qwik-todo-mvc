@@ -2,7 +2,7 @@ import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
 import type { Todo } from "@prisma/client";
 import { CompleteIcon, IncompleteIcon } from "~/components/Icons/Icons";
-import { deleteTodoAction, toggleTodoAction, updateTodoAction } from "..";
+import { deleteAction, toggleAction, updateAction } from "..";
 import styles from "./TodoItem.css?inline";
 
 type Props = {
@@ -13,9 +13,9 @@ type Props = {
 export const TodoItem = component$<Props>((props) => {
   useStylesScoped$(styles);
 
-  const deleteTodo = deleteTodoAction.use();
-  const updateTodo = updateTodoAction.use();
-  const toggleTodo = toggleTodoAction.use();
+  const deleteTodo = deleteAction.use();
+  const updateTodo = updateAction.use();
+  const toggleTodo = toggleAction.use();
 
   // const isDeleting =
   //   canBeOptimistic(deleteFetcher) || (clearingTodos && todo.complete);
@@ -35,12 +35,12 @@ export const TodoItem = component$<Props>((props) => {
   //   (filter === "active" && !optimisticComplete);
 
   return (
-    <li class={["todo", { completed: optimisticComplete }]}>
+    <li class="todo">
       <Form action={updateTodo}>
         <input type="hidden" name="id" value={props.todo.id} />
         <input
           name="title"
-          class="edit"
+          class={["edit", { completed: optimisticComplete }]}
           value={props.todo.title}
           disabled={props.isNew}
           onBlur$={(event) => {

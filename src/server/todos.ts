@@ -64,6 +64,16 @@ export const deleteTodo = ({ ctx, id }: DeleteTodo) => {
   });
 };
 
+type DeleteCompletedTodos = {
+  ctx: ProtectedRequestContext;
+};
+
+export const deleteCompletedTodos = ({ ctx }: DeleteCompletedTodos) => {
+  return ctx.prisma.todo.deleteMany({
+    where: { complete: true, userId: ctx.session.userId },
+  });
+};
+
 export type FilterKind = "active" | "complete" | "all";
 
 type FindTodos = {

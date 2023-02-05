@@ -27,7 +27,7 @@ export const todosLoader = loader$((event) => {
   return findTodos({ ctx, filter: result.data.filter });
 });
 
-export const toggleTodoAction = action$(
+export const toggleAction = action$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -39,7 +39,7 @@ export const toggleTodoAction = action$(
   })
 );
 
-export const updateTodoAction = action$(
+export const updateAction = action$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -51,7 +51,7 @@ export const updateTodoAction = action$(
   })
 );
 
-export const deleteTodoAction = action$(
+export const deleteAction = action$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 

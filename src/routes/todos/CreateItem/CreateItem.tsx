@@ -1,25 +1,25 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
-import { createTodoAction } from "../layout";
+import { createAction } from "../layout";
 import styles from "./CreateItem.css?inline";
 
 export const CreateItem = component$(() => {
   useStylesScoped$(styles);
 
-  const createTodo = createTodoAction.use();
+  const create = createAction.use();
 
   return (
-    <Form action={createTodo}>
+    <Form action={create}>
       <input
         class="new-todo"
         placeholder="What needs to be done?"
         name="title"
-        aria-invalid={createTodo.fail ? true : undefined}
+        aria-invalid={create.fail ? true : undefined}
         aria-describedby="new-todo-error"
       />
-      {createTodo.fail?.fieldErrors.title ? (
+      {create.fail?.fieldErrors.title ? (
         <div class="error" id="new-todo-error">
-          {createTodo.fail?.fieldErrors.title}
+          {create.fail?.fieldErrors.title}
         </div>
       ) : null}
     </Form>

@@ -1,35 +1,57 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
-import { Link, useLocation } from "@builder.io/qwik-city";
+import { Form, Link, useLocation } from "@builder.io/qwik-city";
 import { paths } from "~/utils/paths";
+import { countsLoader, deleteCompletedAction } from "../layout";
 import styles from "./Filters.css?inline";
 
 export const Filters = component$(() => {
   useStylesScoped$(styles);
 
+  const counts = countsLoader.use();
+  const deleteCompleted = deleteCompletedAction.use();
+
   const location = useLocation();
 
-  const filter = location.params.filter;
-
   return (
-    <ul role="navigation" class="filters">
-      <li>
-        <Link href={paths.all} class={{ selected: !filter }}>
-          All
-        </Link>
-      </li>
-      <li>
-        <Link href={paths.active} class={{ selected: filter === "active" }}>
-          Active
-        </Link>
-      </li>
-      <li>
-        <Link
-          href={paths.complete}
-          class={{ selected: filter === "completed" }}
+    <div class="container">
+      <span class="counts">{`${counts.value.active} ${
+        counts.value.active === 1 ? "item" : "items"
+      } left`}</span>
+      <ul role="navigation" class="filters">
+        <li
+          class={[
+            "link",
+            { selected: location.pathname.startsWith(paths.all) },
+          ]}
         >
-          Completed
-        </Link>
-      </li>
-    </ul>
+          <Link href={paths.all}>All</Link>
+        </li>
+        <li
+          class={[
+            "link",
+            { selected: location.pathname.startsWith(paths.active) },
+          ]}
+        >
+          <Link href={paths.active}>Active</Link>
+        </li>
+        <li
+          class={[
+            "link",
+            { selected: location.pathname.startsWith(paths.complete) },
+          ]}
+        >
+          <Link href={paths.complete}>Completed</Link>
+        </li>
+      </ul>
+      {counts.value.complete > 0 ? (
+        <div class="clear">
+          <Form action={deleteCompleted}>
+            <button class="clear-completed" type="submit">
+              Clear completed
+            </button>
+          </Form>
+        </div>
+      ) : null}
+    </div>
   );
 });
