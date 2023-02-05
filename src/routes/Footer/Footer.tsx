@@ -1,22 +1,29 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { DocumentHead, Form } from "@builder.io/qwik-city";
+import { sessionLoader } from "../layout";
 import { signOutAction } from "../todos/layout";
 import styles from "./Footer.css?inline";
 
 export const Footer = component$(() => {
   useStylesScoped$(styles);
 
+  const session = sessionLoader.use();
   const signOut = signOutAction.use();
 
   return (
     <footer class="footer">
-      <Form action={signOut}>
-        <button class="signOut" type="submit">
-          Sign Out
-        </button>
-      </Form>
-      <a href="https://www.builder.io/" target="_blank">
-        Made with ♡ by wmalarski
+      {session.value ? (
+        <Form action={signOut}>
+          <button class="signOut" type="submit">
+            Sign Out
+          </button>
+        </Form>
+      ) : null}
+      <a href="https://github.com/wmalarski/qwik-todo-mvc" target="_blank">
+        Made by wmalarski
+      </a>
+      <a href="http://todomvc.com/" target="_blank">
+        Inspired by TodoMVC
       </a>
     </footer>
   );

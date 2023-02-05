@@ -2,7 +2,7 @@ export const paths = {
   active: "/todos/active",
   all: "/todos/all",
   complete: "/todos/complete",
-  signIn: "/sign-in",
+  signIn: "/",
   signUp: "/sign-up",
   todos: "/todos",
 };

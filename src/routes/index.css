@@ -1,0 +1,61 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap:var(--space-3);
+  padding: var(--space-8) 0;
+}
+
+.title {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  font-size: var(--fontSizes-8xl);
+  font-weight: var(--fontWeights-hairline);
+  color: rgba(var(--colors-rbg-brand-dark), 1);
+  
+  -webkit-text-rendering: optimizeLegibility;
+  -moz-text-rendering: optimizeLegibility;
+  text-rendering: optimizeLegibility;
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.label {
+  font-size: var(--fontSizes-xs);
+}
+
+.input {
+  font-size: var(--fontSizes-2xl);
+  box-shadow: var(--box-shadow-1);
+  padding: var(--space-2);
+}
+
+.btn {
+  color: var(--colors-white);
+  font-size: var(--fontSizes-xl);
+  padding: var(--space-2);
+  background-color: rgba(var(--colors-rbg-brand-dark), 1);
+  cursor: pointer;
+}
+.btn:hover {
+  background-color: rgba(var(--colors-rbg-brand-dark), 0.8);
+}
+.btn:focus-visible {
+  outline: auto;
+}
+
+.error {
+  color: var(--colors-brand-dark);
+}
+
+.link {
+  width: 100%;
+  text-align: center;
+  font-size: var(--fontSizes-md);
+  color: var(--colors-black);
+}

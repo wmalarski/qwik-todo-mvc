@@ -4,7 +4,7 @@ import { getRequestContext } from "~/server/context";
 import { paths } from "~/utils/paths";
 import { Footer } from "./Footer/Footer";
 
-export const userLoader = loader$((event) => {
+export const sessionLoader = loader$((event) => {
   const ctx = getRequestContext(event);
 
   const isInProtected = event.url.pathname.startsWith(paths.todos);
@@ -16,6 +16,8 @@ export const userLoader = loader$((event) => {
   if (!ctx.session && isInProtected) {
     event.redirect(302, paths.signIn);
   }
+
+  return ctx.session;
 });
 
 export default component$(() => {

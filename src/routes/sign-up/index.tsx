@@ -1,4 +1,4 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import {
   action$,
   DocumentHead,
@@ -11,6 +11,7 @@ import { createSession } from "~/server/auth";
 import { getRequestContext } from "~/server/context";
 import { createUser, getUser } from "~/server/user";
 import { paths } from "~/utils/paths";
+import styles from "./index.css?inline";
 
 export const signUpAction = action$(
   async (data, event) => {
@@ -39,47 +40,54 @@ export const signUpAction = action$(
 );
 
 export default component$(() => {
+  useStylesScoped$(styles);
+
   const signUp = signUpAction.use();
 
-  return (
-    <Form class="flex flex-col gap-2" action={signUp}>
-      <h2 class="text-xl">Sign Up</h2>
+  const emailError =
+    signUp.fail?.fieldErrors.email || signUp.value?.errors?.email;
+  const passwordError =
+    signUp.fail?.fieldErrors.password || signUp.value?.errors?.password;
 
-      <div class="form-control w-full">
+  return (
+    <Form class="form" action={signUp}>
+      <h2 class="title">Sign Up</h2>
+
+      <div class="control">
         <label for="email" class="label">
-          <span class="label-text">Email</span>
+          Email
         </label>
         <input
-          class="input input-bordered w-full"
+          aria-invalid={!!emailError}
+          class="input"
           id="email"
           placeholder="Email"
           name="email"
           type="email"
         />
-        <span>
-          {signUp.fail?.fieldErrors.email || signUp.value?.errors?.email}
-        </span>
+        <span class="error">{emailError}</span>
       </div>
 
-      <div class="form-control w-full">
+      <div class="control">
         <label for="password" class="label">
-          <span class="label-text">Password</span>
+          Password
         </label>
         <input
+          aria-invalid={!!passwordError}
           id="password"
-          class="input input-bordered w-full"
+          class="input"
           name="password"
           type="password"
         />
-        <span>
-          {signUp.fail?.fieldErrors.password || signUp.value?.errors?.password}
-        </span>
+        <span class="error">{passwordError}</span>
       </div>
 
-      <button class="btn btn-primary mt-2" type="submit">
+      <button class="btn" type="submit">
         Sign Up
       </button>
-      <Link href={paths.signIn}>Sign In</Link>
+      <div class="link">
+        <Link href={paths.signIn}>Sign In</Link>
+      </div>
     </Form>
   );
 });
