@@ -44,6 +44,8 @@ export const updateAction = action$(
     const ctx = getProtectedRequestContext(event);
 
     await updateTodo({ ctx, ...data });
+
+    await new Promise((resolve) => setTimeout(() => resolve(null), 2000));
   },
   zod$({
     id: z.string(),

@@ -41,6 +41,7 @@
   font-size: var(--fontSizes-3xl);
   color: var(--colors-brand-light);
   transition: color 0.2s ease-out;
+  cursor: pointer;
 }
 .destroy:hover {
   color: var(--colors-brand-base);

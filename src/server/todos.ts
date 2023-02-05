@@ -86,7 +86,7 @@ export const findTodos = ({ ctx, filter }: FindTodos) => {
     filter === "active" ? false : filter === "complete" ? true : undefined;
 
   return ctx.prisma.todo.findMany({
-    orderBy: { createdAt: "asc" },
+    orderBy: { createdAt: "desc" },
     select: { complete: true, createdAt: true, id: true, title: true },
     where: { complete, userId: ctx.session.userId },
   });

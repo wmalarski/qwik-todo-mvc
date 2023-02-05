@@ -7,7 +7,7 @@ import styles from "./TodoItem.css?inline";
 
 type Props = {
   isNew: boolean;
-  todo: Omit<Todo, "userId" | "updatedAt">;
+  todo: Omit<Todo, "userId" | "updatedAt" | "createdAt">;
 };
 
 export const TodoItem = component$<Props>((props) => {
@@ -27,7 +27,13 @@ export const TodoItem = component$<Props>((props) => {
   //   ? togglingComplete
   //   : props.todo.complete;
 
-  const optimisticComplete = props.todo.complete;
+  const optimisticComplete = toggleTodo.isRunning
+    ? !!toggleTodo.formData?.get("complete")
+    : props.todo.complete;
+
+  if (deleteTodo.isRunning) {
+    return null;
+  }
 
   // const shouldRender =
   //   filter === "all" ||
