@@ -1,8 +1,11 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
 import { paths } from "~/utils/paths";
+import styles from "./Filters.css?inline";
 
 export const Filters = component$(() => {
+  useStylesScoped$(styles);
+
   const location = useLocation();
 
   const filter = location.params.filter;

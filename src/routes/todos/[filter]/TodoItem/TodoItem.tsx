@@ -35,63 +35,59 @@ export const TodoItem = component$<Props>((props) => {
   //   (filter === "active" && !optimisticComplete);
 
   return (
-    <li class={["todo", optimisticComplete ? "completed" : ""]}>
-      <div class="view">
-        <Form action={toggleTodo}>
-          <input type="hidden" name="id" value={props.todo.id} />
-          <input
-            type="hidden"
-            name="complete"
-            value={(!optimisticComplete).toString()}
-          />
-          <button
-            type="submit"
-            class="toggle"
-            disabled={props.isNew}
-            title={
-              optimisticComplete ? "Mark as incomplete" : "Mark as complete"
+    <li class={{ completed: optimisticComplete, todo: true }}>
+      <Form action={updateTodo} class="update-form">
+        <input type="hidden" name="id" value={props.todo.id} />
+        <input
+          name="title"
+          class="edit"
+          value={props.todo.title}
+          disabled={props.isNew}
+          onBlur$={(event) => {
+            const value = event.currentTarget.value;
+            if (props.todo.title !== value) {
+              updateTodo.run({ id: props.todo.id, title: value });
             }
+          }}
+          aria-invalid={!!updateTodo.fail?.fieldErrors.title}
+          aria-describedby={`todo-update-error-${props.todo.id}`}
+        />
+        {!!updateTodo.fail?.fieldErrors.title && !updateTodo.isRunning ? (
+          <div
+            class="error todo-update-error"
+            id={`todo-update-error-${props.todo.id}`}
           >
-            {optimisticComplete ? <CompleteIcon /> : <IncompleteIcon />}
-          </button>
-        </Form>
-        <Form action={updateTodo} class="update-form">
-          <input type="hidden" name="id" value={props.todo.id} />
-          <input
-            name="title"
-            class="edit"
-            value={props.todo.title}
-            disabled={props.isNew}
-            onBlur$={(event) => {
-              const value = event.currentTarget.value;
-              if (props.todo.title !== value) {
-                updateTodo.run({ id: props.todo.id, title: value });
-              }
-            }}
-            aria-invalid={!!updateTodo.fail?.fieldErrors.title}
-            aria-describedby={`todo-update-error-${props.todo.id}`}
-          />
-          {!!updateTodo.fail?.fieldErrors.title && !updateTodo.isRunning ? (
-            <div
-              class="error todo-update-error"
-              id={`todo-update-error-${props.todo.id}`}
-            >
-              {updateTodo.fail?.fieldErrors.title}
-            </div>
-          ) : null}
-        </Form>
-        <Form action={deleteTodo}>
-          <input type="hidden" name="id" value={props.todo.id} />
-          <button
-            class="destroy"
-            title="Delete todo"
-            type="submit"
-            name="intent"
-            value="deleteTodo"
-            disabled={props.isNew}
-          />
-        </Form>
-      </div>
+            {updateTodo.fail?.fieldErrors.title}
+          </div>
+        ) : null}
+      </Form>
+      <Form action={toggleTodo}>
+        <input type="hidden" name="id" value={props.todo.id} />
+        <input
+          type="hidden"
+          name="complete"
+          value={(!optimisticComplete).toString()}
+        />
+        <button
+          type="submit"
+          class="toggle"
+          disabled={props.isNew}
+          title={optimisticComplete ? "Mark as incomplete" : "Mark as complete"}
+        >
+          {optimisticComplete ? <CompleteIcon /> : <IncompleteIcon />}
+        </button>
+      </Form>
+      <Form action={deleteTodo}>
+        <input type="hidden" name="id" value={props.todo.id} />
+        <button
+          class="destroy"
+          title="Delete todo"
+          type="submit"
+          name="intent"
+          value="deleteTodo"
+          disabled={props.isNew}
+        />
+      </Form>
     </li>
   );
 });

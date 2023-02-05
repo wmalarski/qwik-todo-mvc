@@ -1,5 +1,5 @@
-import { component$, Slot } from "@builder.io/qwik";
-import { action$, Form, loader$, z, zod$ } from "@builder.io/qwik-city";
+import { component$, Slot, useStylesScoped$ } from "@builder.io/qwik";
+import { action$, loader$, z, zod$ } from "@builder.io/qwik-city";
 import { deleteSession } from "~/server/auth";
 import { getProtectedRequestContext } from "~/server/context";
 import { completeAllTodos, countTodos, createTodo } from "~/server/todos";
@@ -7,6 +7,8 @@ import { paths } from "~/utils/paths";
 import { CheckAll } from "./CheckAll/CheckAll";
 import { CreateInput } from "./CreateItem/CreateItem";
 import { Filters } from "./Filters/Filters";
+import { Footer } from "./Footer/Footer";
+import styles from "./layout.css?inline";
 
 export const countsLoader = loader$((event) => {
   const ctx = getProtectedRequestContext(event);
@@ -43,7 +45,7 @@ export const completeAllTodosAction = action$(
 );
 
 export default component$(() => {
-  const signOut = signOutAction.use();
+  useStylesScoped$(styles);
 
   return (
     <section class="todoapp">
@@ -52,12 +54,9 @@ export default component$(() => {
         <CreateInput />
         <CheckAll />
       </header>
-
       <Slot />
       <Filters />
-      <Form action={signOut}>
-        <button>Sign Out</button>
-      </Form>
+      <Footer />
     </section>
   );
 });

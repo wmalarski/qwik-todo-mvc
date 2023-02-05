@@ -1,8 +1,11 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
 import { createTodoAction } from "../layout";
+import styles from "./CreateItem.css?inline";
 
 export const CreateInput = component$(() => {
+  useStylesScoped$(styles);
+
   const createTodo = createTodoAction.use();
 
   // const createInputRef = React.useRef<HTMLInputElement>(null);
