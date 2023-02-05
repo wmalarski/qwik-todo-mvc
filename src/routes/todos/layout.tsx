@@ -2,6 +2,7 @@ import { component$, Slot } from "@builder.io/qwik";
 import { action$, Form } from "@builder.io/qwik-city";
 import { deleteSession } from "~/server/auth";
 import { paths } from "~/utils/paths";
+import { Filters } from "./Filters/Filters";
 
 export const signOutAction = action$((_data, event) => {
   deleteSession(event);
@@ -18,6 +19,7 @@ export default component$(() => {
         <button>Sign Out</button>
       </Form>
       <Slot />
+      <Filters />
     </>
   );
 });

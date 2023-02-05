@@ -28,7 +28,7 @@ export const signInAction = action$(
       };
     }
 
-    event.redirect(302, paths.todos);
+    event.redirect(302, paths.all);
 
     createSession(event, user.id);
   },

@@ -9,7 +9,7 @@ export const userLoader = loader$((event) => {
   const isInProtected = event.url.pathname.startsWith(paths.todos);
 
   if (ctx.session && !isInProtected) {
-    event.redirect(302, paths.todos);
+    event.redirect(302, paths.all);
   }
 
   if (!ctx.session && isInProtected) {

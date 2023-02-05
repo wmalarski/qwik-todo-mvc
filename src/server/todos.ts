@@ -52,7 +52,7 @@ export const deleteTodo = ({ ctx, id }: DeleteTodo) => {
   });
 };
 
-export type FilterKind = "active" | "complete" | undefined;
+export type FilterKind = "active" | "complete" | "all";
 
 type FindTodos = {
   ctx: ProtectedRequestContext;

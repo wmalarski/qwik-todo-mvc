@@ -15,12 +15,16 @@ import { TodoList } from "./TodoList/TodoList";
 export const todosLoader = loader$((event) => {
   const result = z
     .object({
-      filter: z.union([z.literal("active"), z.literal("complete")]).optional(),
+      filter: z.union([
+        z.literal("active"),
+        z.literal("complete"),
+        z.literal("all"),
+      ]),
     })
-    .safeParse(event.query);
+    .safeParse(event.params);
 
   if (!result.success) {
-    event.redirect(302, paths.todos);
+    event.redirect(302, paths.all);
     return;
   }
 
