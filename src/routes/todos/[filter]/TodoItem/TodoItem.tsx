@@ -1,7 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
 import type { Todo } from "@prisma/client";
-import { deleteTodoAction, toggleTodoAction, updateTodoAction } from "../..";
+import { deleteTodoAction, toggleTodoAction, updateTodoAction } from "..";
 
 type Props = {
   isNew: boolean;

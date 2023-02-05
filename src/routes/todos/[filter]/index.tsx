@@ -1,15 +1,9 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, Resource, useSignal } from "@builder.io/qwik";
 import { action$, DocumentHead, loader$, z, zod$ } from "@builder.io/qwik-city";
 import { getProtectedRequestContext } from "~/server/context";
-import {
-  createTodo,
-  deleteTodo,
-  findTodos,
-  toggleTodo,
-  updateTodo,
-} from "~/server/todos";
+import { deleteTodo, findTodos, toggleTodo, updateTodo } from "~/server/todos";
 import { paths } from "~/utils/paths";
-import { TodoList } from "./TodoList/TodoList";
+import { TodoItem } from "./TodoItem/TodoItem";
 
 export const todosLoader = loader$((event) => {
   const result = z
@@ -30,17 +24,6 @@ export const todosLoader = loader$((event) => {
   const ctx = getProtectedRequestContext(event);
   return findTodos({ ctx, filter: result.data.filter });
 });
-
-export const createTodoAction = action$(
-  async (data, event) => {
-    const ctx = getProtectedRequestContext(event);
-
-    await createTodo({ ctx, ...data });
-  },
-  zod$({
-    title: z.string(),
-  })
-);
 
 export const toggleTodoAction = action$(
   async (data, event) => {
@@ -78,7 +61,29 @@ export const deleteTodoAction = action$(
 );
 
 export default component$(() => {
-  return <TodoList />;
+  const todos = todosLoader.use();
+  const hack = useSignal(0);
+
+  return (
+    <ul class="todo-list">
+      <pre>{todos.value?.length}</pre>
+      {/* This hidden button is required for reloading loader somehow */}
+      <button
+        class="hidden"
+        onClick$={() => (hack.value = todos.value?.length || 0)}
+      />
+      <Resource
+        value={todos}
+        onResolved={(collection) => (
+          <>
+            {collection?.map((todo) => (
+              <TodoItem todo={todo} key={todo.id} isNew={false} />
+            ))}
+          </>
+        )}
+      />
+    </ul>
+  );
 });
 
 export const head: DocumentHead = {

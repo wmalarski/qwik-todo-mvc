@@ -28,6 +28,17 @@ export const toggleTodo = ({ ctx, id, complete }: ToggleTodo) => {
   });
 };
 
+type CompleteAllTodos = {
+  ctx: ProtectedRequestContext;
+};
+
+export const completeAllTodos = ({ ctx }: CompleteAllTodos) => {
+  return ctx.prisma.todo.updateMany({
+    data: { complete: true },
+    where: { userId: ctx.session.userId },
+  });
+};
+
 type UpdateTodo = {
   ctx: ProtectedRequestContext;
   id: string;
