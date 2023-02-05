@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
-import { createTodoAction } from "..";
+import { createTodoAction } from "../[filter]";
 
 export const CreateInput = component$(() => {
   const createTodo = createTodoAction.use();

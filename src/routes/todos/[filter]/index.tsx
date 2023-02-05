@@ -9,7 +9,6 @@ import {
   updateTodo,
 } from "~/server/todos";
 import { paths } from "~/utils/paths";
-import { CreateInput } from "./CreateItem/CreateItem";
 import { TodoList } from "./TodoList/TodoList";
 
 export const todosLoader = loader$((event) => {
@@ -79,12 +78,7 @@ export const deleteTodoAction = action$(
 );
 
 export default component$(() => {
-  return (
-    <div>
-      <CreateInput />
-      <TodoList />
-    </div>
-  );
+  return <TodoList />;
 });
 
 export const head: DocumentHead = {
