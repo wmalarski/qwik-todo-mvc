@@ -1,7 +1,7 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { Form, Link, useLocation } from "@builder.io/qwik-city";
 import { paths } from "~/utils/paths";
-import { countsLoader, deleteCompletedAction } from "../layout";
+import { countsLoader, deleteCompletedAction } from "../index";
 import styles from "./Filters.css?inline";
 
 export const Filters = component$(() => {

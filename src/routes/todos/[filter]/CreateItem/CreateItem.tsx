@@ -1,7 +1,7 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
-import { createAction } from "../layout";
-import { TodoItem } from "../[filter]/TodoItem/TodoItem";
+import { createAction } from "../index";
+import { TodoItem } from "../TodoItem/TodoItem";
 import styles from "./CreateItem.css?inline";
 
 export const CreateItem = component$(() => {

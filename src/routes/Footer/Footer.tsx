@@ -1,7 +1,6 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { DocumentHead, Form } from "@builder.io/qwik-city";
-import { sessionLoader } from "../layout";
-import { signOutAction } from "../todos/layout";
+import { sessionLoader, signOutAction } from "../layout";
 import styles from "./Footer.css?inline";
 
 export const Footer = component$(() => {

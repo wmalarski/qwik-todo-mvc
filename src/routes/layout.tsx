@@ -1,5 +1,6 @@
 import { component$, Slot } from "@builder.io/qwik";
-import { DocumentHead, loader$ } from "@builder.io/qwik-city";
+import { action$, DocumentHead, loader$ } from "@builder.io/qwik-city";
+import { deleteSession } from "~/server/auth";
 import { getRequestContext } from "~/server/context";
 import { paths } from "~/utils/paths";
 import { Footer } from "./Footer/Footer";
@@ -18,6 +19,12 @@ export const sessionLoader = loader$((event) => {
   }
 
   return ctx.session;
+});
+
+export const signOutAction = action$((_data, event) => {
+  deleteSession(event);
+
+  event.redirect(302, paths.signIn);
 });
 
 export default component$(() => {

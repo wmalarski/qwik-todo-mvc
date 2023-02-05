@@ -1,8 +1,20 @@
 import { component$, useSignal, useStylesScoped$ } from "@builder.io/qwik";
 import { action$, DocumentHead, loader$, z, zod$ } from "@builder.io/qwik-city";
 import { getProtectedRequestContext } from "~/server/context";
-import { deleteTodo, findTodos, toggleTodo, updateTodo } from "~/server/todos";
+import {
+  completeAllTodos,
+  countTodos,
+  createTodo,
+  deleteCompletedTodos,
+  deleteTodo,
+  findTodos,
+  toggleTodo,
+  updateTodo,
+} from "~/server/todos";
 import { paths } from "~/utils/paths";
+import { CheckAll } from "./CheckAll/CheckAll";
+import { CreateItem } from "./CreateItem/CreateItem";
+import { Filters } from "./Filters/Filters";
 import styles from "./index.css?inline";
 import { TodoItem } from "./TodoItem/TodoItem";
 
@@ -25,6 +37,40 @@ export const todosLoader = loader$((event) => {
   const ctx = getProtectedRequestContext(event);
 
   return findTodos({ ctx, filter: result.data.filter });
+});
+
+export const countsLoader = loader$((event) => {
+  const ctx = getProtectedRequestContext(event);
+
+  return countTodos({ ctx });
+});
+
+export const createAction = action$(
+  async (data, event) => {
+    const ctx = getProtectedRequestContext(event);
+
+    await createTodo({ ctx, ...data });
+  },
+  zod$({
+    title: z.string(),
+  })
+);
+
+export const completeAllAction = action$(
+  async (data, event) => {
+    const ctx = getProtectedRequestContext(event);
+
+    await completeAllTodos({ ctx, ...data });
+  },
+  zod$({
+    complete: z.coerce.boolean(),
+  })
+);
+
+export const deleteCompletedAction = action$(async (_data, event) => {
+  const ctx = getProtectedRequestContext(event);
+
+  await deleteCompletedTodos({ ctx });
 });
 
 export const toggleAction = action$(
@@ -72,6 +118,8 @@ export default component$(() => {
 
   return (
     <section class="main">
+      <CreateItem />
+      <CheckAll />
       {/* This hidden button is required for reloading loader somehow */}
       <button
         class="hidden"
@@ -82,6 +130,7 @@ export default component$(() => {
           <TodoItem todo={todo} key={todo.id} isNew={false} />
         ))}
       </ul>
+      <Filters />
     </section>
   );
 });
