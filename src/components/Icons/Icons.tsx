@@ -11,7 +11,7 @@ export const IncompleteIcon = () => {
         cy="50"
         r="50"
         fill="none"
-        stroke="#ededed"
+        stroke="currentColor"
         stroke-width="3"
       />
     </svg>

@@ -47,7 +47,7 @@ export const updateTodoAction = action$(
   },
   zod$({
     id: z.string(),
-    title: z.string(),
+    title: z.string().min(1),
   })
 );
 

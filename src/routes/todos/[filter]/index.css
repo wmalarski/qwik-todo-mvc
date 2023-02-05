@@ -1,5 +1,5 @@
 .main {
-  border-top: 1px solid #e6e6e6;
+  border-top: 1px solid var(--colors-gray-200);
 }
 
 .todo-list {

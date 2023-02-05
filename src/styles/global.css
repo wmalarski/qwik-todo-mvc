@@ -3,9 +3,13 @@
   --colors-black: #000000;
   --colors-gray-100: #f5f5f5;
   --colors-gray-200: #e6e6e6;
+  --colors-gray-300: #d9d9d9;
   --colors-gray-500: #4d4d4d;
   --colors-gray-600: #737373;
   --colors-gray-900: #0006;
+  --colors-brand-light: #cc9a9a;
+  --colors-brand-base: #af5b5e;
+  --colors-brand-dark: #af2f2f;
 
   --colors-rgb-white: 1, 1, 1;
   --colors-rbg-black: 0, 0, 0;

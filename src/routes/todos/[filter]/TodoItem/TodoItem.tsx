@@ -35,8 +35,8 @@ export const TodoItem = component$<Props>((props) => {
   //   (filter === "active" && !optimisticComplete);
 
   return (
-    <li class={{ completed: optimisticComplete, todo: true }}>
-      <Form action={updateTodo} class="update-form">
+    <li class={["todo", { completed: optimisticComplete }]}>
+      <Form action={updateTodo}>
         <input type="hidden" name="id" value={props.todo.id} />
         <input
           name="title"
@@ -44,7 +44,7 @@ export const TodoItem = component$<Props>((props) => {
           value={props.todo.title}
           disabled={props.isNew}
           onBlur$={(event) => {
-            const value = event.currentTarget.value;
+            const value = event.target.value;
             if (props.todo.title !== value) {
               updateTodo.run({ id: props.todo.id, title: value });
             }
@@ -53,10 +53,7 @@ export const TodoItem = component$<Props>((props) => {
           aria-describedby={`todo-update-error-${props.todo.id}`}
         />
         {!!updateTodo.fail?.fieldErrors.title && !updateTodo.isRunning ? (
-          <div
-            class="error todo-update-error"
-            id={`todo-update-error-${props.todo.id}`}
-          >
+          <div class="error" id={`todo-update-error-${props.todo.id}`}>
             {updateTodo.fail?.fieldErrors.title}
           </div>
         ) : null}
@@ -83,8 +80,6 @@ export const TodoItem = component$<Props>((props) => {
           class="destroy"
           title="Delete todo"
           type="submit"
-          name="intent"
-          value="deleteTodo"
           disabled={props.isNew}
         />
       </Form>
