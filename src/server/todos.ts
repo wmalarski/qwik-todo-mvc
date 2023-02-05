@@ -30,11 +30,12 @@ export const toggleTodo = ({ ctx, id, complete }: ToggleTodo) => {
 
 type CompleteAllTodos = {
   ctx: ProtectedRequestContext;
+  complete: boolean;
 };
 
-export const completeAllTodos = ({ ctx }: CompleteAllTodos) => {
+export const completeAllTodos = ({ ctx, complete }: CompleteAllTodos) => {
   return ctx.prisma.todo.updateMany({
-    data: { complete: true },
+    data: { complete },
     where: { userId: ctx.session.userId },
   });
 };
@@ -81,4 +82,29 @@ export const findTodos = ({ ctx, filter }: FindTodos) => {
       userId: ctx.session.userId,
     },
   });
+};
+
+type CountTodos = {
+  ctx: ProtectedRequestContext;
+};
+
+export const countTodos = async ({ ctx }: CountTodos) => {
+  const result = await ctx.prisma.todo.groupBy({
+    _count: { complete: true },
+    by: ["complete"],
+    where: { userId: ctx.session.userId },
+  });
+
+  const all = result.reduce((prev, curr) => {
+    return prev + curr._count.complete;
+  }, 0);
+
+  return result.reduce<Record<FilterKind, number>>(
+    (prev, curr) => {
+      const key = curr.complete ? "complete" : "active";
+      prev[key] = curr._count.complete;
+      return prev;
+    },
+    { active: 0, all, complete: 0 }
+  );
 };

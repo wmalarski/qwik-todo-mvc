@@ -1,8 +1,16 @@
-import { component$, Resource, useSignal } from "@builder.io/qwik";
+import { component$, useSignal } from "@builder.io/qwik";
 import { action$, DocumentHead, loader$, z, zod$ } from "@builder.io/qwik-city";
 import { getProtectedRequestContext } from "~/server/context";
-import { deleteTodo, findTodos, toggleTodo, updateTodo } from "~/server/todos";
+import {
+  completeAllTodos,
+  countTodos,
+  deleteTodo,
+  findTodos,
+  toggleTodo,
+  updateTodo,
+} from "~/server/todos";
 import { paths } from "~/utils/paths";
+import { CheckAll } from "./CheckAll/CheckAll";
 import { TodoItem } from "./TodoItem/TodoItem";
 
 export const todosLoader = loader$((event) => {
@@ -22,7 +30,14 @@ export const todosLoader = loader$((event) => {
   }
 
   const ctx = getProtectedRequestContext(event);
+
   return findTodos({ ctx, filter: result.data.filter });
+});
+
+export const countsLoader = loader$((event) => {
+  const ctx = getProtectedRequestContext(event);
+
+  return countTodos({ ctx });
 });
 
 export const toggleTodoAction = action$(
@@ -34,6 +49,17 @@ export const toggleTodoAction = action$(
   zod$({
     complete: z.boolean(),
     id: z.string(),
+  })
+);
+
+export const completeAllTodosAction = action$(
+  async (data, event) => {
+    const ctx = getProtectedRequestContext(event);
+
+    await completeAllTodos({ ctx, ...data });
+  },
+  zod$({
+    complete: z.boolean(),
   })
 );
 
@@ -62,27 +88,22 @@ export const deleteTodoAction = action$(
 
 export default component$(() => {
   const todos = todosLoader.use();
-  const hack = useSignal(0);
+  const workaround = useSignal(0);
 
   return (
-    <ul class="todo-list">
-      <pre>{todos.value?.length}</pre>
+    <section class="main">
+      <CheckAll />
       {/* This hidden button is required for reloading loader somehow */}
       <button
         class="hidden"
-        onClick$={() => (hack.value = todos.value?.length || 0)}
+        onClick$={() => (workaround.value = todos.value?.length || 0)}
       />
-      <Resource
-        value={todos}
-        onResolved={(collection) => (
-          <>
-            {collection?.map((todo) => (
-              <TodoItem todo={todo} key={todo.id} isNew={false} />
-            ))}
-          </>
-        )}
-      />
-    </ul>
+      <ul class="todo-list">
+        {todos.value?.map((todo) => (
+          <TodoItem todo={todo} key={todo.id} isNew={false} />
+        ))}
+      </ul>
+    </section>
   );
 });
 
