@@ -1,38 +1,29 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
 import { createAction } from "../index";
-import { TodoItem } from "../TodoItem/TodoItem";
 import styles from "./CreateItem.css?inline";
 
-export const CreateItem = component$(() => {
-  useStylesScoped$(styles);
+type Props = {
+  action: ReturnType<(typeof createAction)["use"]>;
+};
 
-  const create = createAction.use();
+export const CreateItem = component$<Props>((props) => {
+  useStylesScoped$(styles);
 
   return (
     <>
-      <Form action={create}>
+      <Form action={props.action}>
         <input
           class="new-todo"
           placeholder="What needs to be done?"
           name="title"
-          aria-invalid={create.fail ? true : undefined}
+          aria-invalid={props.action.fail ? true : undefined}
           aria-describedby="new-todo-error"
         />
-        {create.fail?.fieldErrors.title ? (
+        {props.action.fail?.fieldErrors.title ? (
           <div class="error" id="new-todo-error">
-            {create.fail?.fieldErrors.title}
+            {props.action.fail?.fieldErrors.title}
           </div>
-        ) : null}
-        {create.isRunning ? (
-          <TodoItem
-            todo={{
-              complete: false,
-              id: "new",
-              title: create.formData?.get("title") as string,
-            }}
-            isNew
-          />
         ) : null}
       </Form>
     </>

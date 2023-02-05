@@ -50,6 +50,8 @@ export const createAction = action$(
     const ctx = getProtectedRequestContext(event);
 
     await createTodo({ ctx, ...data });
+
+    await new Promise((resolve) => setTimeout(() => resolve(null), 2000));
   },
   zod$({
     title: z.string(),
@@ -78,6 +80,8 @@ export const toggleAction = action$(
     const ctx = getProtectedRequestContext(event);
 
     await toggleTodo({ ctx, ...data });
+
+    await new Promise((resolve) => setTimeout(() => resolve(null), 2000));
   },
   zod$({
     complete: z.coerce.boolean(),
@@ -104,6 +108,8 @@ export const deleteAction = action$(
     const ctx = getProtectedRequestContext(event);
 
     await deleteTodo({ ctx, ...data });
+
+    await new Promise((resolve) => setTimeout(() => resolve(null), 2000));
   },
   zod$({
     id: z.string(),
@@ -116,9 +122,13 @@ export default component$(() => {
   const todos = todosLoader.use();
   const workaround = useSignal(0);
 
+  const create = createAction.use();
+  const deleteTodo = deleteAction.use();
+  const toggleTodo = toggleAction.use();
+
   return (
     <section class="main">
-      <CreateItem />
+      <CreateItem action={create} />
       <CheckAll />
       {/* This hidden button is required for reloading loader somehow */}
       <button
@@ -126,11 +136,33 @@ export default component$(() => {
         onClick$={() => (workaround.value = todos.value?.length || 0)}
       />
       <ul class="todo-list">
+        {create.isRunning ? (
+          <TodoItem
+            deleteTodo={deleteTodo}
+            toggleTodo={toggleTodo}
+            todo={{
+              complete: false,
+              id: "new",
+              title: create.formData?.get("title") as string,
+            }}
+            isNew
+          />
+        ) : null}
         {todos.value?.map((todo) => (
-          <TodoItem todo={todo} key={todo.id} isNew={false} />
+          <TodoItem
+            toggleTodo={toggleTodo}
+            deleteTodo={deleteTodo}
+            isNew={false}
+            key={todo.id}
+            todo={todo}
+          />
         ))}
       </ul>
-      <Filters />
+      <Filters
+        toggleTodo={toggleTodo}
+        createTodo={create}
+        deleteTodo={deleteTodo}
+      />
     </section>
   );
 });

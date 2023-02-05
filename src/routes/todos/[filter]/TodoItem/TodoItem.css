@@ -23,6 +23,10 @@
   appearance: none;
   cursor: pointer;
 }
+.toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .completed {
   color: var(--colors-gray-300);
@@ -52,6 +56,11 @@
 .todo:hover .destroy {
   display: block;
 }
+.destroy:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 
 .error {
   position: absolute;
