@@ -47,14 +47,16 @@ export default component$(() => {
   useStylesScoped$(styles);
 
   return (
-    <section class="todoapp">
+    <div class="container">
       <header>
-        <h1>TODOS</h1>
+        <h1 class="title">TODOS</h1>
+      </header>
+      <section class="content">
         <CreateItem />
         <CheckAll />
-      </header>
-      <Slot />
-      <Filters />
-    </section>
+        <Slot />
+        <Filters />
+      </section>
+    </div>
   );
 });

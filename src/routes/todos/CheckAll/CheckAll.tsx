@@ -21,7 +21,7 @@ export const CheckAll = component$(() => {
             value={areAllCompleted ? undefined : "1"}
           />
           <button
-            class={`toggle-all ${areAllCompleted ? "checked" : ""}`}
+            class={["toggle-all", { checked: areAllCompleted }]}
             type="submit"
           >
             {"❯"}

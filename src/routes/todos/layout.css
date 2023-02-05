@@ -1,37 +1,22 @@
-.todoapp {
-  background: #fff;
-  margin: 130px 0 40px 0;
-  position: relative;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+.container {
+  padding: var(--space-8) 0;
 }
 
-.todoapp input::-webkit-input-placeholder {
-  font-style: italic;
-  font-weight: 300;
-  color: #e6e6e6;
-}
-
-.todoapp input::-moz-placeholder {
-  font-style: italic;
-  font-weight: 300;
-  color: #e6e6e6;
-}
-
-.todoapp input::input-placeholder {
-  font-style: italic;
-  font-weight: 300;
-  color: #e6e6e6;
-}
-
-.todoapp h1 {
-  position: absolute;
-  top: -155px;
+.title {
   width: 100%;
-  font-size: 100px;
-  font-weight: 100;
+  margin: 0;
   text-align: center;
-  color: rgba(175, 47, 47, 0.15);
+  font-size: var(--fontSizes-8xl);
+  font-weight: var(--fontWeights-hairline);
+  color: rgba(var(--colors-rbg-brand-dark), 1);
+  
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
+}
+
+.content {
+  position: relative;
+  background: var(--colors-white);
+  box-shadow: var(--box-shadow-2);
 }

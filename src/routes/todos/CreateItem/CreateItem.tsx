@@ -8,14 +8,8 @@ export const CreateItem = component$(() => {
 
   const createTodo = createTodoAction.use();
 
-  // const createInputRef = React.useRef<HTMLInputElement>(null);
-
-  // React.useEffect(() => {
-  //   if (!hidden) createInputRef.current?.focus();
-  // }, [hidden]);
-
   return (
-    <Form class="create-form" action={createTodo}>
+    <Form action={createTodo}>
       <input
         class="new-todo"
         placeholder="What needs to be done?"
