@@ -1,20 +1,23 @@
 import { component$ } from "@builder.io/qwik";
 import { action$, DocumentHead, loader$, z, zod$ } from "@builder.io/qwik-city";
 import { getProtectedRequestContext } from "~/server/context";
-import { createTodo, findTodos } from "~/server/todos";
+import {
+  createTodo,
+  deleteTodo,
+  findTodos,
+  toggleTodo,
+  updateTodo,
+} from "~/server/todos";
 import { paths } from "~/utils/paths";
 import { CreateInput } from "./CreateItem/CreateItem";
 import { TodoList } from "./TodoList/TodoList";
 
 export const todosLoader = loader$((event) => {
-  const params = new URL(event.request.url).searchParams;
-  const entries = Object.fromEntries(params.entries());
-
   const result = z
     .object({
       filter: z.union([z.literal("active"), z.literal("complete")]).optional(),
     })
-    .safeParse(entries);
+    .safeParse(event.query);
 
   if (!result.success) {
     event.redirect(302, paths.todos);
@@ -33,6 +36,41 @@ export const createTodoAction = action$(
   },
   zod$({
     title: z.string(),
+  })
+);
+
+export const toggleTodoAction = action$(
+  async (data, event) => {
+    const ctx = getProtectedRequestContext(event);
+
+    await toggleTodo({ ctx, ...data });
+  },
+  zod$({
+    complete: z.boolean(),
+    id: z.string(),
+  })
+);
+
+export const updateTodoAction = action$(
+  async (data, event) => {
+    const ctx = getProtectedRequestContext(event);
+
+    await updateTodo({ ctx, ...data });
+  },
+  zod$({
+    id: z.string(),
+    title: z.string(),
+  })
+);
+
+export const deleteTodoAction = action$(
+  async (data, event) => {
+    const ctx = getProtectedRequestContext(event);
+
+    await deleteTodo({ ctx, ...data });
+  },
+  zod$({
+    id: z.string(),
   })
 );
 

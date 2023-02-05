@@ -6,10 +6,10 @@ export const TodoList = component$(() => {
   const todos = todosLoader.use();
 
   return (
-    <div>
+    <ul class="todo-list">
       {todos.value?.map((todo) => (
-        <TodoItem todo={todo} key={todo.id} />
+        <TodoItem todo={todo} key={todo.id} isNew={false} />
       ))}
-    </div>
+    </ul>
   );
 });
