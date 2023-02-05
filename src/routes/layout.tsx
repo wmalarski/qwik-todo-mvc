@@ -2,6 +2,7 @@ import { component$, Slot } from "@builder.io/qwik";
 import { DocumentHead, loader$ } from "@builder.io/qwik-city";
 import { getRequestContext } from "~/server/context";
 import { paths } from "~/utils/paths";
+import { Footer } from "./Footer/Footer";
 
 export const userLoader = loader$((event) => {
   const ctx = getRequestContext(event);
@@ -23,11 +24,7 @@ export default component$(() => {
       <main>
         <Slot />
       </main>
-      <footer>
-        <a href="https://www.builder.io/" target="_blank">
-          Made with ♡ by wmalarski
-        </a>
-      </footer>
+      <Footer />
     </>
   );
 });

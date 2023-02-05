@@ -34,7 +34,7 @@ export const toggleTodoAction = action$(
     await toggleTodo({ ctx, ...data });
   },
   zod$({
-    complete: z.boolean(),
+    complete: z.coerce.boolean(),
     id: z.string(),
   })
 );

@@ -5,9 +5,8 @@ import { getProtectedRequestContext } from "~/server/context";
 import { completeAllTodos, countTodos, createTodo } from "~/server/todos";
 import { paths } from "~/utils/paths";
 import { CheckAll } from "./CheckAll/CheckAll";
-import { CreateInput } from "./CreateItem/CreateItem";
+import { CreateItem } from "./CreateItem/CreateItem";
 import { Filters } from "./Filters/Filters";
-import { Footer } from "./Footer/Footer";
 import styles from "./layout.css?inline";
 
 export const countsLoader = loader$((event) => {
@@ -40,7 +39,7 @@ export const completeAllTodosAction = action$(
     await completeAllTodos({ ctx, ...data });
   },
   zod$({
-    complete: z.boolean(),
+    complete: z.coerce.boolean(),
   })
 );
 
@@ -51,12 +50,11 @@ export default component$(() => {
     <section class="todoapp">
       <header>
         <h1>TODOS</h1>
-        <CreateInput />
+        <CreateItem />
         <CheckAll />
       </header>
       <Slot />
       <Filters />
-      <Footer />
     </section>
   );
 });

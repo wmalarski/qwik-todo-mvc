@@ -66,7 +66,7 @@ export const TodoItem = component$<Props>((props) => {
         <input
           type="hidden"
           name="complete"
-          value={(!optimisticComplete).toString()}
+          value={optimisticComplete ? undefined : "1"}
         />
         <button
           type="submit"

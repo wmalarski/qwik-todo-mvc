@@ -3,7 +3,7 @@ import { Form } from "@builder.io/qwik-city";
 import { createTodoAction } from "../layout";
 import styles from "./CreateItem.css?inline";
 
-export const CreateInput = component$(() => {
+export const CreateItem = component$(() => {
   useStylesScoped$(styles);
 
   const createTodo = createTodoAction.use();

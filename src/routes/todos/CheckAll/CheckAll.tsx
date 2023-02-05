@@ -18,7 +18,7 @@ export const CheckAll = component$(() => {
           <input
             name="complete"
             type="hidden"
-            value={String(areAllCompleted)}
+            value={areAllCompleted ? undefined : "1"}
           />
           <button
             class={`toggle-all ${areAllCompleted ? "checked" : ""}`}
