@@ -1,16 +1,9 @@
-import { component$, useSignal } from "@builder.io/qwik";
+import { component$, useSignal, useStylesScoped$ } from "@builder.io/qwik";
 import { action$, DocumentHead, loader$, z, zod$ } from "@builder.io/qwik-city";
 import { getProtectedRequestContext } from "~/server/context";
-import {
-  completeAllTodos,
-  countTodos,
-  deleteTodo,
-  findTodos,
-  toggleTodo,
-  updateTodo,
-} from "~/server/todos";
+import { deleteTodo, findTodos, toggleTodo, updateTodo } from "~/server/todos";
 import { paths } from "~/utils/paths";
-import { CheckAll } from "./CheckAll/CheckAll";
+import styles from "./index.css?inline";
 import { TodoItem } from "./TodoItem/TodoItem";
 
 export const todosLoader = loader$((event) => {
@@ -34,12 +27,6 @@ export const todosLoader = loader$((event) => {
   return findTodos({ ctx, filter: result.data.filter });
 });
 
-export const countsLoader = loader$((event) => {
-  const ctx = getProtectedRequestContext(event);
-
-  return countTodos({ ctx });
-});
-
 export const toggleTodoAction = action$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
@@ -49,17 +36,6 @@ export const toggleTodoAction = action$(
   zod$({
     complete: z.boolean(),
     id: z.string(),
-  })
-);
-
-export const completeAllTodosAction = action$(
-  async (data, event) => {
-    const ctx = getProtectedRequestContext(event);
-
-    await completeAllTodos({ ctx, ...data });
-  },
-  zod$({
-    complete: z.boolean(),
   })
 );
 
@@ -87,12 +63,13 @@ export const deleteTodoAction = action$(
 );
 
 export default component$(() => {
+  useStylesScoped$(styles);
+
   const todos = todosLoader.use();
   const workaround = useSignal(0);
 
   return (
     <section class="main">
-      <CheckAll />
       {/* This hidden button is required for reloading loader somehow */}
       <button
         class="hidden"

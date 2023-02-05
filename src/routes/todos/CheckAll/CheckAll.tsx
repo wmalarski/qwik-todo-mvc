@@ -1,8 +1,11 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
-import { completeAllTodosAction, countsLoader } from "..";
+import { completeAllTodosAction, countsLoader } from "../layout";
+import styles from "./CheckAll.css?inline";
 
 export const CheckAll = component$(() => {
+  useStylesScoped$(styles);
+
   const counts = countsLoader.use();
   const completeAllTodos = completeAllTodosAction.use();
 

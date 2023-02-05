@@ -1,7 +1,9 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
 import type { Todo } from "@prisma/client";
+import { CompleteIcon, IncompleteIcon } from "~/components/Icons/Icons";
 import { deleteTodoAction, toggleTodoAction, updateTodoAction } from "..";
+import styles from "./TodoItem.css?inline";
 
 type Props = {
   isNew: boolean;
@@ -9,6 +11,8 @@ type Props = {
 };
 
 export const TodoItem = component$<Props>((props) => {
+  useStylesScoped$(styles);
+
   const deleteTodo = deleteTodoAction.use();
   const updateTodo = updateTodoAction.use();
   const toggleTodo = toggleTodoAction.use();
@@ -47,13 +51,15 @@ export const TodoItem = component$<Props>((props) => {
             title={
               optimisticComplete ? "Mark as incomplete" : "Mark as complete"
             }
-          />
+          >
+            {optimisticComplete ? <CompleteIcon /> : <IncompleteIcon />}
+          </button>
         </Form>
         <Form action={updateTodo} class="update-form">
           <input type="hidden" name="id" value={props.todo.id} />
           <input
             name="title"
-            class="edit-input"
+            class="edit"
             value={props.todo.title}
             disabled={props.isNew}
             onBlur$={(event) => {

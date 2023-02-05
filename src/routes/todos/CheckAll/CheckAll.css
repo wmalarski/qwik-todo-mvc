@@ -1,0 +1,14 @@
+.toggle-all {  
+  position: absolute;
+  top: 10px;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+  font-size: 22px;
+  color: #e6e6e6;
+  padding: 10px 25px;
+  cursor:pointer;
+}
+
+.toggle-all:checked {
+  color: #737373;
+}
