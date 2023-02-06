@@ -8,35 +8,20 @@ import styles from "./TodoItem.css?inline";
 type Props = {
   isNew: boolean;
   todo: Omit<Todo, "userId" | "updatedAt" | "createdAt">;
-  deleteTodo: ReturnType<(typeof deleteAction)["use"]>;
-  toggleTodo: ReturnType<(typeof toggleAction)["use"]>;
 };
 
 export const TodoItem = component$<Props>((props) => {
   useStylesScoped$(styles);
 
   const updateTodo = updateAction.use();
+  const deleteTodo = deleteAction.use();
+  const toggleTodo = toggleAction.use();
 
-  // const isDeleting =
-  //   canBeOptimistic(deleteFetcher) || (clearingTodos && todo.complete);
-  // const isToggling = canBeOptimistic(toggleFetcher);
+  const optimisticComplete = toggleTodo.isRunning
+    ? !!toggleTodo.formData?.get("complete")
+    : props.todo.complete;
 
-  // const optimisticComplete = isToggling
-  //   ? toggleFetcher.submission?.formData.get("complete") === "true"
-  //   : typeof togglingComplete === "boolean"
-  //   ? togglingComplete
-  //   : props.todo.complete;
-
-  const optimisticComplete =
-    props.toggleTodo.isRunning &&
-    props.toggleTodo.formData?.get("id") === props.todo.id
-      ? !!props.toggleTodo.formData?.get("complete")
-      : props.todo.complete;
-
-  if (
-    props.deleteTodo.isRunning &&
-    props.deleteTodo.formData?.get("id") === props.todo.id
-  ) {
+  if (deleteTodo.isRunning) {
     return null;
   }
 
@@ -64,7 +49,7 @@ export const TodoItem = component$<Props>((props) => {
           </div>
         ) : null}
       </Form>
-      <Form action={props.toggleTodo}>
+      <Form action={toggleTodo}>
         <input type="hidden" name="id" value={props.todo.id} />
         <input
           type="hidden"
@@ -74,19 +59,19 @@ export const TodoItem = component$<Props>((props) => {
         <button
           type="submit"
           class="toggle"
-          disabled={props.isNew || props.toggleTodo.isRunning}
+          disabled={props.isNew || toggleTodo.isRunning}
           title={optimisticComplete ? "Mark as incomplete" : "Mark as complete"}
         >
           {optimisticComplete ? <CompleteIcon /> : <IncompleteIcon />}
         </button>
       </Form>
-      <Form action={props.deleteTodo}>
+      <Form action={deleteTodo}>
         <input type="hidden" name="id" value={props.todo.id} />
         <button
           class="destroy"
           title="Delete todo"
           type="submit"
-          disabled={props.isNew || props.deleteTodo.isRunning}
+          disabled={props.isNew || deleteTodo.isRunning}
         />
       </Form>
     </li>

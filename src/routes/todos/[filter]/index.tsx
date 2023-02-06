@@ -138,8 +138,6 @@ export default component$(() => {
       <ul class="todo-list">
         {create.isRunning ? (
           <TodoItem
-            deleteTodo={deleteTodo}
-            toggleTodo={toggleTodo}
             todo={{
               complete: false,
               id: "new",
@@ -149,13 +147,7 @@ export default component$(() => {
           />
         ) : null}
         {todos.value?.map((todo) => (
-          <TodoItem
-            toggleTodo={toggleTodo}
-            deleteTodo={deleteTodo}
-            isNew={false}
-            key={todo.id}
-            todo={todo}
-          />
+          <TodoItem isNew={false} key={todo.id} todo={todo} />
         ))}
       </ul>
       <Filters
