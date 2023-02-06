@@ -12,7 +12,16 @@ export const CheckAll = component$<Props>((props) => {
 
   const counts = countsLoader.use();
 
-  const areAllCompleted = counts.value.complete === counts.value.all;
+  const areAllActivating =
+    props.completeAll.isRunning && !props.completeAll.formData?.get("complete");
+
+  const areAllCompleting =
+    props.completeAll.isRunning &&
+    !!props.completeAll.formData?.get("complete");
+
+  const areAllCompleted =
+    (areAllCompleting || counts.value.complete === counts.value.all) &&
+    !areAllActivating;
 
   return (
     <>

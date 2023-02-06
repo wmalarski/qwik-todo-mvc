@@ -17,6 +17,9 @@ export const Filters = component$<Props>((props) => {
 
   const count = counts.value.active;
 
+  const hideDeleteCompleted =
+    counts.value.complete < 1 || props.deleteCompleted.isRunning;
+
   return (
     <div class="container">
       <span class="counts">{`${count} ${
@@ -48,7 +51,7 @@ export const Filters = component$<Props>((props) => {
           <Link href={paths.complete}>Completed</Link>
         </li>
       </ul>
-      {counts.value.complete > 0 ? (
+      {!hideDeleteCompleted ? (
         <div class="clear">
           <Form action={props.deleteCompleted}>
             <button
