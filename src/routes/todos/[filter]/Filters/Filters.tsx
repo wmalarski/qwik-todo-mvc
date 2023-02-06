@@ -1,37 +1,21 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { Form, Link, useLocation } from "@builder.io/qwik-city";
 import { paths } from "~/utils/paths";
-import {
-  countsLoader,
-  createAction,
-  deleteAction,
-  deleteCompletedAction,
-  toggleAction,
-} from "../index";
+import { countsLoader, deleteCompletedAction } from "../index";
 import styles from "./Filters.css?inline";
 
 type Props = {
-  createTodo: ReturnType<(typeof createAction)["use"]>;
-  deleteTodo: ReturnType<(typeof deleteAction)["use"]>;
-  toggleTodo: ReturnType<(typeof toggleAction)["use"]>;
+  deleteCompleted: ReturnType<(typeof deleteCompletedAction)["use"]>;
 };
 
 export const Filters = component$<Props>((props) => {
   useStylesScoped$(styles);
 
   const counts = countsLoader.use();
-  const deleteCompleted = deleteCompletedAction.use();
 
   const location = useLocation();
 
-  const createShift = props.createTodo.isRunning ? 1 : 0;
-  const deleteShift = props.deleteTodo.isRunning ? -1 : 0;
-  const toggleShift = !props.toggleTodo.isRunning
-    ? 0
-    : props.toggleTodo.formData?.get("complete")
-    ? -1
-    : 1;
-  const count = counts.value.active + createShift + deleteShift + toggleShift;
+  const count = counts.value.active;
 
   return (
     <div class="container">
@@ -66,8 +50,12 @@ export const Filters = component$<Props>((props) => {
       </ul>
       {counts.value.complete > 0 ? (
         <div class="clear">
-          <Form action={deleteCompleted}>
-            <button class="clear-completed" type="submit">
+          <Form action={props.deleteCompleted}>
+            <button
+              class="clear-completed"
+              type="submit"
+              disabled={props.deleteCompleted.isRunning}
+            >
               Clear completed
             </button>
           </Form>

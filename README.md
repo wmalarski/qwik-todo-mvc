@@ -10,9 +10,10 @@
 - [x] Using `loader$` and `action$`(with `zod$` validation)
 - [x] Filtering todo list
 - [x] Listing and updating todos
-- [ ] Optimistic updates
+- [x] Optimistic updates
 - [ ] Check no JS
 - [ ] Docker Deployment
+- [ ] Optimistic counter updates (waiting for fix to `onSubmit$`)
 
 ## Project Structure
 

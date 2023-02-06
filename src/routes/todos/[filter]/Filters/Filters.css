@@ -57,3 +57,7 @@
 .clear-completed:hover {
   text-decoration: underline;
 }
+.clear-completed:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
