@@ -1,7 +1,7 @@
 .new-todo {
   margin: 0;
   width: 100%;
-  padding: var(--space-2);  
+  padding: var(--space-2);
   font-size: var(--fontSizes-2xl);
   padding: var(--space-4) var(--space-4) var(--space-4) var(--space-14);
   background: rgba(var(--colors-rgb-white), 0.003);

@@ -9,7 +9,7 @@
   font-size: var(--fontSizes-8xl);
   font-weight: var(--fontWeights-hairline);
   color: rgba(var(--colors-rbg-brand-dark), 1);
-  
+
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;

@@ -61,7 +61,6 @@
   cursor: not-allowed;
 }
 
-
 .error {
   position: absolute;
   bottom: var(--space-1);

@@ -5,7 +5,7 @@ if (typeof window !== "undefined") {
 }
 
 const envSchema = z.object({
-  NODE_ENV: z.string(),
+  NODE_ENV: z.string().default("production"),
   SESSION_SECRET: z.string(),
 });
 

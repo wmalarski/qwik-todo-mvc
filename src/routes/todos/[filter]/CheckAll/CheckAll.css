@@ -1,4 +1,4 @@
-.toggle-all {  
+.toggle-all {
   position: absolute;
   top: var(--space-2);
   -webkit-transform: rotate(90deg);
