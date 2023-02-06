@@ -125,6 +125,7 @@ export default component$(() => {
       {/* This hidden button is required for reloading loader somehow */}
       <button
         class="hidden"
+        // eslint-disable-next-line qwik/valid-lexical-scope
         onClick$={() => (workaround.value = todos.value?.length || 0)}
       />
       <ul class="todo-list">
