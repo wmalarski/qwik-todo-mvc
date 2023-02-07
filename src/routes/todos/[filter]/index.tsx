@@ -13,10 +13,7 @@ import {
   countTodos,
   createTodo,
   deleteCompletedTodos,
-  deleteTodo,
   findTodos,
-  toggleTodo,
-  updateTodo,
 } from "~/server/todos";
 import { paths } from "~/utils/paths";
 import { Filters } from "./Filters/Filters";
@@ -78,41 +75,6 @@ export const deleteCompletedAction = action$(async (_data, event) => {
   await deleteCompletedTodos({ ctx });
 });
 
-export const toggleAction = action$(
-  async (data, event) => {
-    const ctx = getProtectedRequestContext(event);
-
-    await toggleTodo({ ctx, ...data });
-  },
-  zod$({
-    complete: z.coerce.boolean(),
-    id: z.string(),
-  })
-);
-
-export const updateAction = action$(
-  async (data, event) => {
-    const ctx = getProtectedRequestContext(event);
-
-    await updateTodo({ ctx, ...data });
-  },
-  zod$({
-    id: z.string(),
-    title: z.string().min(1),
-  })
-);
-
-export const deleteAction = action$(
-  async (data, event) => {
-    const ctx = getProtectedRequestContext(event);
-
-    await deleteTodo({ ctx, ...data });
-  },
-  zod$({
-    id: z.string(),
-  })
-);
-
 export default component$(() => {
   useStylesScoped$(styles);
 
@@ -137,7 +99,7 @@ export default component$(() => {
 
   return (
     <section class="main">
-      <Form action={create}>
+      <Form action={create} spaReset>
         <input
           class="new-todo"
           placeholder="What needs to be done?"

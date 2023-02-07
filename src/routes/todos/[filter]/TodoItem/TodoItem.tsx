@@ -1,15 +1,46 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
-import { Form, useLocation } from "@builder.io/qwik-city";
+import { action$, Form, useLocation, z, zod$ } from "@builder.io/qwik-city";
 import type { Todo } from "@prisma/client";
 import { CompleteIcon, IncompleteIcon } from "~/components/Icons/Icons";
-import {
-  completeAllAction,
-  deleteAction,
-  deleteCompletedAction,
-  toggleAction,
-  updateAction,
-} from "..";
+import { getProtectedRequestContext } from "~/server/context";
+import { deleteTodo, toggleTodo, updateTodo } from "~/server/todos";
+import { completeAllAction, deleteCompletedAction } from "..";
 import styles from "./TodoItem.css?inline";
+
+export const toggleAction = action$(
+  async (data, event) => {
+    const ctx = getProtectedRequestContext(event);
+
+    await toggleTodo({ ctx, ...data });
+  },
+  zod$({
+    complete: z.coerce.boolean(),
+    id: z.string(),
+  })
+);
+
+export const updateAction = action$(
+  async (data, event) => {
+    const ctx = getProtectedRequestContext(event);
+
+    await updateTodo({ ctx, ...data });
+  },
+  zod$({
+    id: z.string(),
+    title: z.string().min(1),
+  })
+);
+
+export const deleteAction = action$(
+  async (data, event) => {
+    const ctx = getProtectedRequestContext(event);
+
+    await deleteTodo({ ctx, ...data });
+  },
+  zod$({
+    id: z.string(),
+  })
+);
 
 type Props = {
   completeAll: ReturnType<(typeof completeAllAction)["use"]>;
