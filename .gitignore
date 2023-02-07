@@ -7,6 +7,7 @@
 # Development
 node_modules
 .env
+db.sqlite
 
 # Cache
 .cache

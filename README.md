@@ -11,9 +11,17 @@
 - [x] Filtering todo list
 - [x] Listing and updating todos
 - [x] Optimistic updates
-- [ ] Check no JS
+- [x] Check no JS
 - [ ] Docker Deployment
 - [ ] Optimistic counter updates (waiting for fix to `onSubmit$`)
+- [ ] No JS - clear all completed fix
+
+## How to run?
+
+1. `pnpm i`
+2. create `.env` file based on `.env.example`
+3. `pnpm prisma db push`
+4. `pnpm dev`
 
 ## Project Structure
 
