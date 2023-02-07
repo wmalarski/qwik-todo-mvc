@@ -1,5 +1,12 @@
 import { component$, useSignal, useStylesScoped$ } from "@builder.io/qwik";
-import { action$, DocumentHead, loader$, z, zod$ } from "@builder.io/qwik-city";
+import {
+  action$,
+  DocumentHead,
+  Form,
+  loader$,
+  z,
+  zod$,
+} from "@builder.io/qwik-city";
 import { getProtectedRequestContext } from "~/server/context";
 import {
   completeAllTodos,
@@ -12,8 +19,6 @@ import {
   updateTodo,
 } from "~/server/todos";
 import { paths } from "~/utils/paths";
-import { CheckAll } from "./CheckAll/CheckAll";
-import { CreateItem } from "./CreateItem/CreateItem";
 import { Filters } from "./Filters/Filters";
 import styles from "./index.css?inline";
 import { TodoItem } from "./TodoItem/TodoItem";
@@ -118,10 +123,49 @@ export default component$(() => {
   const completeAll = completeAllAction.use();
   const deleteCompleted = deleteCompletedAction.use();
 
+  const counts = countsLoader.use();
+
+  const areAllActivating =
+    completeAll.isRunning && !completeAll.formData?.get("complete");
+
+  const areAllCompleting =
+    completeAll.isRunning && !!completeAll.formData?.get("complete");
+
+  const areAllCompleted =
+    (areAllCompleting || counts.value.complete === counts.value.all) &&
+    !areAllActivating;
+
   return (
     <section class="main">
-      <CreateItem action={create} />
-      <CheckAll completeAll={completeAll} />
+      <Form action={create}>
+        <input
+          class="new-todo"
+          placeholder="What needs to be done?"
+          name="title"
+          aria-invalid={create.fail ? true : undefined}
+          aria-describedby="new-todo-error"
+        />
+        {create.fail?.fieldErrors.title ? (
+          <div class="error" id="new-todo-error">
+            {create.fail?.fieldErrors.title}
+          </div>
+        ) : null}
+      </Form>
+      {counts.value.all > 0 ? (
+        <Form action={completeAll}>
+          <input
+            name="complete"
+            type="hidden"
+            value={areAllCompleted ? undefined : "1"}
+          />
+          <button
+            class={["toggle-all", { checked: areAllCompleted }]}
+            type="submit"
+          >
+            {"❯"}
+          </button>
+        </Form>
+      ) : null}
       {/* This hidden button is required for reloading loader somehow */}
       <button
         class="hidden"
