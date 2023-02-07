@@ -20,18 +20,16 @@ export const signInAction = action$(
     const user = await verifyLogin({ ctx, ...data });
 
     if (!user) {
-      event.status(400);
-      return {
-        errors: {
-          email: "Invalid email or password",
+      return event.fail(400, {
+        fieldErrors: {
+          email: ["Invalid email or password"],
           password: null,
         },
-      };
+      });
     }
+    createSession(event, user.id);
 
     event.redirect(302, paths.all);
-
-    createSession(event, user.id);
   },
   zod$({
     email: z.string().email(),
@@ -44,10 +42,8 @@ export default component$(() => {
 
   const signIn = signInAction.use();
 
-  const emailError =
-    signIn.fail?.fieldErrors.email || signIn.value?.errors?.email;
-  const passwordError =
-    signIn.fail?.fieldErrors.password || signIn.value?.errors?.password;
+  const emailError = signIn.fail?.fieldErrors.email?.[0];
+  const passwordError = signIn.fail?.fieldErrors.password?.[0];
 
   return (
     <Form class="form" action={signIn}>

@@ -20,13 +20,12 @@ export const signUpAction = action$(
     const existing = await getUser({ ctx, email: data.email });
 
     if (existing) {
-      event.status(400);
-      return {
-        errors: {
-          email: "A user already exists with this email",
+      return event.fail(400, {
+        fieldErrors: {
+          email: ["A user already exists with this email"],
           password: null,
         },
-      };
+      });
     }
 
     const user = await createUser({ ctx, ...data });
@@ -35,7 +34,7 @@ export const signUpAction = action$(
   },
   zod$({
     email: z.string().email(),
-    password: z.string(),
+    password: z.string().min(6),
   })
 );
 
@@ -44,10 +43,8 @@ export default component$(() => {
 
   const signUp = signUpAction.use();
 
-  const emailError =
-    signUp.fail?.fieldErrors.email || signUp.value?.errors?.email;
-  const passwordError =
-    signUp.fail?.fieldErrors.password || signUp.value?.errors?.password;
+  const emailError = signUp.fail?.fieldErrors.email?.[0];
+  const passwordError = signUp.fail?.fieldErrors.password?.[0];
 
   return (
     <Form class="form" action={signUp}>
