@@ -3,7 +3,7 @@ import {
   action$,
   DocumentHead,
   Form,
-  Link,
+  loader$,
   z,
   zod$,
 } from "@builder.io/qwik-city";
@@ -12,6 +12,14 @@ import { getRequestContext } from "~/server/context";
 import { createUser, getUser } from "~/server/user";
 import { paths } from "~/utils/paths";
 import styles from "./index.css?inline";
+
+export const sessionLoader = loader$((event) => {
+  const ctx = getRequestContext(event);
+
+  if (ctx.session) {
+    event.redirect(302, paths.all);
+  }
+});
 
 export const signUpAction = action$(
   async (data, event) => {
@@ -31,6 +39,8 @@ export const signUpAction = action$(
     const user = await createUser({ ctx, ...data });
 
     createSession(event, user.id);
+
+    event.redirect(302, paths.all);
   },
   zod$({
     email: z.string().email(),
@@ -40,6 +50,8 @@ export const signUpAction = action$(
 
 export default component$(() => {
   useStylesScoped$(styles);
+
+  sessionLoader.use();
 
   const signUp = signUpAction.use();
 
@@ -83,7 +95,7 @@ export default component$(() => {
         Sign Up
       </button>
       <div class="link">
-        <Link href={paths.signIn}>Sign In</Link>
+        <a href={paths.signIn}>Sign In</a>
       </div>
     </Form>
   );

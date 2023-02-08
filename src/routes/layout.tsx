@@ -1,31 +1,6 @@
 import { component$, Slot } from "@builder.io/qwik";
-import { action$, DocumentHead, loader$ } from "@builder.io/qwik-city";
-import { deleteSession } from "~/server/auth";
-import { getRequestContext } from "~/server/context";
-import { paths } from "~/utils/paths";
+import { DocumentHead } from "@builder.io/qwik-city";
 import { Footer } from "./Footer/Footer";
-
-export const sessionLoader = loader$((event) => {
-  const ctx = getRequestContext(event);
-
-  const isInProtected = event.url.pathname.startsWith(paths.todos);
-
-  if (ctx.session && !isInProtected) {
-    event.redirect(302, paths.all);
-  }
-
-  if (!ctx.session && isInProtected) {
-    event.redirect(302, paths.signIn);
-  }
-
-  return ctx.session;
-});
-
-export const signOutAction = action$((_data, event) => {
-  deleteSession(event);
-
-  event.redirect(302, paths.signIn);
-});
 
 export default component$(() => {
   return (

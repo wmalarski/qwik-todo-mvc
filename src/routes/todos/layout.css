@@ -1,5 +1,5 @@
 .container {
-  padding: var(--space-8) 0;
+  padding-top: var(--space-8);
 }
 
 .title {
@@ -19,4 +19,20 @@
   position: relative;
   background: var(--colors-white);
   box-shadow: var(--box-shadow-2);
+}
+
+.signOutBox {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.signOut,
+.signOut:active {
+  text-decoration: none;
+  cursor: pointer;
+}
+.signOut:hover {
+  text-decoration: underline;
 }

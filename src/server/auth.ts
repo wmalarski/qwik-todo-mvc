@@ -26,10 +26,15 @@ export const createSession = (event: ServerRequest, userId: string) => {
     ...options,
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
+  // somehow cookie.set is not working right now
+  event.headers.set("Set-Cookie", event.cookie.headers()[0]);
 };
 
 export const deleteSession = (event: ServerRequest) => {
   event.cookie.delete(USER_SESSION_KEY, options);
+
+  // somehow cookie.delete is not working right now
+  event.headers.set("Set-Cookie", event.cookie.headers()[0]);
 };
 
 export const getSession = (event: ServerRequest): Session | null => {

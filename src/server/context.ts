@@ -14,13 +14,13 @@ export type ProtectedRequestContext = {
 };
 
 const getRequestSession = (event: ServerRequest): Session | null => {
-  const session = event.sharedMap.get("session");
-  if (session) {
-    return session;
+  const value = event.sharedMap.get("session");
+  if (value) {
+    return value.session;
   }
-  const newSession = getSession(event);
-  event.sharedMap.set("session", newSession);
-  return newSession;
+  const session = getSession(event);
+  event.sharedMap.set("session", { session });
+  return session;
 };
 
 export const getRequestContext = (event: ServerRequest): RequestContext => {
