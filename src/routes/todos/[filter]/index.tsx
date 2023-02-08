@@ -104,12 +104,12 @@ export default component$(() => {
           class="new-todo"
           placeholder="What needs to be done?"
           name="title"
-          aria-invalid={create.fail ? true : undefined}
+          aria-invalid={create.value ? true : undefined}
           aria-describedby="new-todo-error"
         />
-        {create.fail?.fieldErrors.title ? (
+        {create.value?.fieldErrors.title ? (
           <div class="error" id="new-todo-error">
-            {create.fail?.fieldErrors.title}
+            {create.value?.fieldErrors.title?.[0]}
           </div>
         ) : null}
       </Form>

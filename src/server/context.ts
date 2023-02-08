@@ -1,7 +1,7 @@
-import type { RequestEvent, RequestEventLoader } from "@builder.io/qwik-city";
 import { paths } from "~/utils/paths";
 import { getSession, Session } from "./auth";
-import { DbPrismaClient, prisma } from "./db";
+import { prisma, type DbPrismaClient } from "./db";
+import type { ServerRequest } from "./types";
 
 export type RequestContext = {
   prisma: DbPrismaClient;
@@ -13,9 +13,7 @@ export type ProtectedRequestContext = {
   session: Session;
 };
 
-const getRequestSession = (
-  event: RequestEventLoader | RequestEvent
-): Session | null => {
+const getRequestSession = (event: ServerRequest): Session | null => {
   const session = event.sharedMap.get("session");
   if (session) {
     return session;
@@ -25,15 +23,13 @@ const getRequestSession = (
   return newSession;
 };
 
-export const getRequestContext = (
-  event: RequestEventLoader | RequestEvent
-): RequestContext => {
+export const getRequestContext = (event: ServerRequest): RequestContext => {
   const session = getRequestSession(event);
   return { prisma, session };
 };
 
 export const getProtectedRequestContext = (
-  event: RequestEventLoader | RequestEvent
+  event: ServerRequest
 ): ProtectedRequestContext => {
   const session = getRequestSession(event);
 

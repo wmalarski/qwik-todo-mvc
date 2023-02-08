@@ -43,8 +43,8 @@ export default component$(() => {
 
   const signUp = signUpAction.use();
 
-  const emailError = signUp.fail?.fieldErrors.email?.[0];
-  const passwordError = signUp.fail?.fieldErrors.password?.[0];
+  const emailError = signUp.value?.fieldErrors.email?.[0];
+  const passwordError = signUp.value?.fieldErrors.password?.[0];
 
   return (
     <Form class="form" action={signUp}>
