@@ -1,6 +1,6 @@
+import type { RequestEventCommon } from "@builder.io/qwik-city";
 import jwt from "jsonwebtoken";
 import { env } from "./env";
-import type { ServerRequest } from "./types";
 
 export type Session = {
   userId: string;
@@ -19,7 +19,7 @@ const options = {
 
 export const USER_SESSION_KEY = "__session";
 
-export const createSession = (event: ServerRequest, userId: string) => {
+export const createSession = (event: RequestEventCommon, userId: string) => {
   const token = jwt.sign({ userId }, env.SESSION_SECRET, { expiresIn: "7d" });
 
   event.cookie.set(USER_SESSION_KEY, token, {
@@ -30,14 +30,14 @@ export const createSession = (event: ServerRequest, userId: string) => {
   event.headers.set("Set-Cookie", event.cookie.headers()[0]);
 };
 
-export const deleteSession = (event: ServerRequest) => {
+export const deleteSession = (event: RequestEventCommon) => {
   event.cookie.delete(USER_SESSION_KEY, options);
 
   // somehow cookie.delete is not working right now
   event.headers.set("Set-Cookie", event.cookie.headers()[0]);
 };
 
-export const getSession = (event: ServerRequest): Session | null => {
+export const getSession = (event: RequestEventCommon): Session | null => {
   const token = event.cookie.get(USER_SESSION_KEY)?.value;
 
   if (!token) {

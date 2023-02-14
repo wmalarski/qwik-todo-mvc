@@ -21,7 +21,7 @@ import { paths } from "~/utils/paths";
 import styles from "./index.css?inline";
 import { TodoItem } from "./TodoItem/TodoItem";
 
-export const todosLoader = loader$((event) => {
+export const useTodosLoader = loader$((event) => {
   const result = z
     .object({
       filter: z.union([
@@ -42,13 +42,13 @@ export const todosLoader = loader$((event) => {
   return findTodos({ ctx, filter: result.data.filter });
 });
 
-export const countsLoader = loader$((event) => {
+export const useCountsLoader = loader$((event) => {
   const ctx = getProtectedRequestContext(event);
 
   return countTodos({ ctx });
 });
 
-export const createAction = action$(
+export const useCreateAction = action$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -59,7 +59,7 @@ export const createAction = action$(
   })
 );
 
-export const completeAllAction = action$(
+export const useCompleteAllAction = action$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -70,7 +70,7 @@ export const completeAllAction = action$(
   })
 );
 
-export const deleteCompletedAction = action$(async (_data, event) => {
+export const useDeleteCompletedAction = action$(async (_data, event) => {
   const ctx = getProtectedRequestContext(event);
 
   await deleteCompletedTodos({ ctx });
@@ -81,13 +81,13 @@ export default component$(() => {
 
   const location = useLocation();
 
-  const todos = todosLoader.use();
+  const todos = useTodosLoader();
 
-  const create = createAction.use();
-  const completeAll = completeAllAction.use();
-  const deleteCompleted = deleteCompletedAction.use();
+  const create = useCreateAction();
+  const completeAll = useCompleteAllAction();
+  const deleteCompleted = useDeleteCompletedAction();
 
-  const counts = countsLoader.use();
+  const counts = useCountsLoader();
 
   const areAllActivating =
     completeAll.isRunning && !completeAll.formData?.get("complete");
@@ -136,7 +136,8 @@ export default component$(() => {
         </Form>
       ) : null}
       <ul class="todo-list">
-        {create.isRunning ? (
+        {create.isRunning &&
+        !location.url.pathname.startsWith(paths.complete) ? (
           <TodoItem
             completeAll={completeAll}
             deleteCompleted={deleteCompleted}
@@ -166,7 +167,7 @@ export default component$(() => {
           <li
             class={[
               "link",
-              { selected: location.pathname.startsWith(paths.all) },
+              { selected: location.url.pathname.startsWith(paths.all) },
             ]}
           >
             <Link href={paths.all}>All</Link>
@@ -174,7 +175,7 @@ export default component$(() => {
           <li
             class={[
               "link",
-              { selected: location.pathname.startsWith(paths.active) },
+              { selected: location.url.pathname.startsWith(paths.active) },
             ]}
           >
             <Link href={paths.active}>Active</Link>
@@ -182,7 +183,7 @@ export default component$(() => {
           <li
             class={[
               "link",
-              { selected: location.pathname.startsWith(paths.complete) },
+              { selected: location.url.pathname.startsWith(paths.complete) },
             ]}
           >
             <Link href={paths.complete}>Completed</Link>

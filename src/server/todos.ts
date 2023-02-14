@@ -1,4 +1,4 @@
-import { ProtectedRequestContext } from "./context";
+import type { ProtectedRequestContext } from "./context";
 
 type CreateTodo = {
   ctx: ProtectedRequestContext;

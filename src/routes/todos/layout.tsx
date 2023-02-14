@@ -5,7 +5,7 @@ import { getRequestContext } from "~/server/context";
 import { paths } from "~/utils/paths";
 import styles from "./layout.css?inline";
 
-export const sessionLoader = loader$((event) => {
+export const useSessionLoader = loader$((event) => {
   const ctx = getRequestContext(event);
 
   if (!ctx.session) {
@@ -15,7 +15,7 @@ export const sessionLoader = loader$((event) => {
   return ctx.session;
 });
 
-export const signOutAction = action$((_data, event) => {
+export const useSignOutAction = action$((_data, event) => {
   deleteSession(event);
 
   event.redirect(302, paths.signIn);
@@ -24,9 +24,9 @@ export const signOutAction = action$((_data, event) => {
 export default component$(() => {
   useStylesScoped$(styles);
 
-  sessionLoader.use();
+  useSessionLoader();
 
-  const signOut = signOutAction.use();
+  const signOut = useSignOutAction();
 
   return (
     <div class="container">

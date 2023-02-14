@@ -4,10 +4,10 @@ import type { Todo } from "@prisma/client";
 import { CompleteIcon, IncompleteIcon } from "~/components/Icons/Icons";
 import { getProtectedRequestContext } from "~/server/context";
 import { deleteTodo, toggleTodo, updateTodo } from "~/server/todos";
-import { completeAllAction, deleteCompletedAction } from "..";
+import { useCompleteAllAction, useDeleteCompletedAction } from "..";
 import styles from "./TodoItem.css?inline";
 
-export const toggleAction = action$(
+export const useToggleAction = action$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -19,7 +19,7 @@ export const toggleAction = action$(
   })
 );
 
-export const updateAction = action$(
+export const useUpdateAction = action$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -31,7 +31,7 @@ export const updateAction = action$(
   })
 );
 
-export const deleteAction = action$(
+export const useDeleteAction = action$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -43,8 +43,8 @@ export const deleteAction = action$(
 );
 
 type Props = {
-  completeAll: ReturnType<(typeof completeAllAction)["use"]>;
-  deleteCompleted: ReturnType<(typeof deleteCompletedAction)["use"]>;
+  completeAll: ReturnType<typeof useCompleteAllAction>;
+  deleteCompleted: ReturnType<typeof useDeleteCompletedAction>;
   isNew: boolean;
   todo: Omit<Todo, "userId" | "updatedAt" | "createdAt">;
 };
@@ -54,9 +54,9 @@ export const TodoItem = component$<Props>((props) => {
 
   const location = useLocation();
 
-  const updateTodo = updateAction.use();
-  const deleteTodo = deleteAction.use();
-  const toggleTodo = toggleAction.use();
+  const updateTodo = useUpdateAction();
+  const deleteTodo = useDeleteAction();
+  const toggleTodo = useToggleAction();
 
   const completed = props.completeAll.isRunning
     ? !!props.completeAll.formData?.get("complete")

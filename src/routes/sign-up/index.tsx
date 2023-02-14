@@ -13,7 +13,7 @@ import { createUser, getUser } from "~/server/user";
 import { paths } from "~/utils/paths";
 import styles from "./index.css?inline";
 
-export const sessionLoader = loader$((event) => {
+export const useSessionLoader = loader$((event) => {
   const ctx = getRequestContext(event);
 
   if (ctx.session) {
@@ -21,7 +21,7 @@ export const sessionLoader = loader$((event) => {
   }
 });
 
-export const signUpAction = action$(
+export const useSignUpAction = action$(
   async (data, event) => {
     const ctx = getRequestContext(event);
 
@@ -51,9 +51,9 @@ export const signUpAction = action$(
 export default component$(() => {
   useStylesScoped$(styles);
 
-  sessionLoader.use();
+  useSessionLoader();
 
-  const signUp = signUpAction.use();
+  const signUp = useSignUpAction();
 
   const emailError = signUp.value?.fieldErrors.email?.[0];
   const passwordError = signUp.value?.fieldErrors.password?.[0];

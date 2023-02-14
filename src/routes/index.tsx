@@ -13,7 +13,7 @@ import { verifyLogin } from "~/server/user";
 import { paths } from "~/utils/paths";
 import styles from "./index.css?inline";
 
-export const sessionLoader = loader$((event) => {
+export const useSessionLoader = loader$((event) => {
   const ctx = getRequestContext(event);
 
   if (ctx.session) {
@@ -21,7 +21,7 @@ export const sessionLoader = loader$((event) => {
   }
 });
 
-export const signInAction = action$(
+export const useSignInAction = action$(
   async (data, event) => {
     const ctx = getRequestContext(event);
 
@@ -48,9 +48,9 @@ export const signInAction = action$(
 export default component$(() => {
   useStylesScoped$(styles);
 
-  sessionLoader.use();
+  useSessionLoader();
 
-  const signIn = signInAction.use();
+  const signIn = useSignInAction();
 
   const emailError = signIn.value?.fieldErrors.email?.[0];
   const passwordError = signIn.value?.fieldErrors.password?.[0];
