@@ -1,11 +1,11 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import {
   action$,
-  DocumentHead,
   Form,
   loader$,
   z,
   zod$,
+  type DocumentHead,
 } from "@builder.io/qwik-city";
 import { createSession } from "~/server/auth";
 import { getRequestContext } from "~/server/context";

@@ -1,13 +1,13 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import {
   action$,
-  DocumentHead,
   Form,
   Link,
   loader$,
   useLocation,
   z,
   zod$,
+  type DocumentHead,
 } from "@builder.io/qwik-city";
 import { getProtectedRequestContext } from "~/server/context";
 import {

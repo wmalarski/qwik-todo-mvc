@@ -4,7 +4,7 @@ import type { Todo } from "@prisma/client";
 import { CompleteIcon, IncompleteIcon } from "~/components/Icons/Icons";
 import { getProtectedRequestContext } from "~/server/context";
 import { deleteTodo, toggleTodo, updateTodo } from "~/server/todos";
-import { useCompleteAllAction, useDeleteCompletedAction } from "..";
+import type { useCompleteAllAction, useDeleteCompletedAction } from "..";
 import styles from "./TodoItem.css?inline";
 
 export const useToggleAction = action$(
