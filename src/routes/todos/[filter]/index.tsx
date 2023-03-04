@@ -3,7 +3,7 @@ import {
   action$,
   Form,
   Link,
-  loader$,
+  routeLoader$,
   useLocation,
   z,
   zod$,
@@ -21,7 +21,7 @@ import { paths } from "~/utils/paths";
 import styles from "./index.css?inline";
 import { TodoItem } from "./TodoItem/TodoItem";
 
-export const useTodosLoader = loader$((event) => {
+export const useTodosLoader = routeLoader$((event) => {
   const result = z
     .object({
       filter: z.union([
@@ -42,7 +42,7 @@ export const useTodosLoader = loader$((event) => {
   return findTodos({ ctx, filter: result.data.filter });
 });
 
-export const useCountsLoader = loader$((event) => {
+export const useCountsLoader = routeLoader$((event) => {
   const ctx = getProtectedRequestContext(event);
 
   return countTodos({ ctx });

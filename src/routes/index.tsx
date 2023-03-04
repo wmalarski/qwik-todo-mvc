@@ -2,7 +2,7 @@ import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import {
   action$,
   Form,
-  loader$,
+  routeLoader$,
   z,
   zod$,
   type DocumentHead,
@@ -13,7 +13,7 @@ import { verifyLogin } from "~/server/user";
 import { paths } from "~/utils/paths";
 import styles from "./index.css?inline";
 
-export const useSessionLoader = loader$((event) => {
+export const useSessionLoader = routeLoader$((event) => {
   const ctx = getRequestContext(event);
 
   if (ctx.session) {

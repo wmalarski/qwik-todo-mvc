@@ -1,11 +1,11 @@
 import { component$, Slot, useStylesScoped$ } from "@builder.io/qwik";
-import { action$, Form, loader$ } from "@builder.io/qwik-city";
+import { action$, Form, routeLoader$ } from "@builder.io/qwik-city";
 import { deleteSession } from "~/server/auth";
 import { getRequestContext } from "~/server/context";
 import { paths } from "~/utils/paths";
 import styles from "./layout.css?inline";
 
-export const useSessionLoader = loader$((event) => {
+export const useSessionLoader = routeLoader$((event) => {
   const ctx = getRequestContext(event);
 
   if (!ctx.session) {
