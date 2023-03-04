@@ -114,7 +114,7 @@ export default component$(() => {
           aria-invalid={create.value ? true : undefined}
           aria-describedby="new-todo-error"
         />
-        {create.value?.fieldErrors.title ? (
+        {create.value?.fieldErrors?.title ? (
           <div class="error" id="new-todo-error">
             {create.value?.fieldErrors.title?.[0]}
           </div>

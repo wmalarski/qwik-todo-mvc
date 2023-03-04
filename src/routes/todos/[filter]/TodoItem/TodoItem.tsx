@@ -91,10 +91,10 @@ export const TodoItem = component$<Props>((props) => {
               updateTodo.run({ id: props.todo.id, title: value });
             }
           }}
-          aria-invalid={!!updateTodo.value?.fieldErrors.title}
+          aria-invalid={!!updateTodo.value?.fieldErrors?.title}
           aria-describedby={`todo-update-error-${props.todo.id}`}
         />
-        {!!updateTodo.value?.fieldErrors.title && !updateTodo.isRunning ? (
+        {!!updateTodo.value?.fieldErrors?.title && !updateTodo.isRunning ? (
           <div class="error" id={`todo-update-error-${props.todo.id}`}>
             {updateTodo.value?.fieldErrors.title?.[0]}
           </div>
