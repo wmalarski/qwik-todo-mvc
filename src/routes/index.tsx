@@ -1,7 +1,7 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import {
-  action$,
   Form,
+  routeAction$,
   routeLoader$,
   z,
   zod$,
@@ -21,7 +21,7 @@ export const useSessionLoader = routeLoader$((event) => {
   }
 });
 
-export const useSignInAction = action$(
+export const useSignInAction = routeAction$(
   async (data, event) => {
     const ctx = getRequestContext(event);
 
