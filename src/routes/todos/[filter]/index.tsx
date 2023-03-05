@@ -1,7 +1,7 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import {
-  action$,
   Form,
+  globalAction$,
   Link,
   routeLoader$,
   useLocation,
@@ -48,7 +48,7 @@ export const useCountsLoader = routeLoader$((event) => {
   return countTodos({ ctx });
 });
 
-export const useCreateAction = action$(
+export const useCreateAction = globalAction$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -59,7 +59,7 @@ export const useCreateAction = action$(
   })
 );
 
-export const useCompleteAllAction = action$(
+export const useCompleteAllAction = globalAction$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -70,7 +70,7 @@ export const useCompleteAllAction = action$(
   })
 );
 
-export const useDeleteCompletedAction = action$(async (_data, event) => {
+export const useDeleteCompletedAction = globalAction$(async (_data, event) => {
   const ctx = getProtectedRequestContext(event);
 
   await deleteCompletedTodos({ ctx });

@@ -1,5 +1,11 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
-import { action$, Form, useLocation, z, zod$ } from "@builder.io/qwik-city";
+import {
+  Form,
+  globalAction$,
+  useLocation,
+  z,
+  zod$,
+} from "@builder.io/qwik-city";
 import type { Todo } from "@prisma/client";
 import { CompleteIcon, IncompleteIcon } from "~/components/Icons/Icons";
 import { getProtectedRequestContext } from "~/server/context";
@@ -7,7 +13,7 @@ import { deleteTodo, toggleTodo, updateTodo } from "~/server/todos";
 import type { useCompleteAllAction, useDeleteCompletedAction } from "..";
 import styles from "./TodoItem.css?inline";
 
-export const useToggleAction = action$(
+export const useToggleAction = globalAction$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -19,7 +25,7 @@ export const useToggleAction = action$(
   })
 );
 
-export const useUpdateAction = action$(
+export const useUpdateAction = globalAction$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
@@ -31,7 +37,7 @@ export const useUpdateAction = action$(
   })
 );
 
-export const useDeleteAction = action$(
+export const useDeleteAction = globalAction$(
   async (data, event) => {
     const ctx = getProtectedRequestContext(event);
 
