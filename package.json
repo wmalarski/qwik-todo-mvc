@@ -32,9 +32,11 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.15.3",
     "@types/node-fetch": "latest",
+    "@types/pg": "^8.6.6",
     "@typescript-eslint/eslint-plugin": "5.55.0",
     "@typescript-eslint/parser": "5.55.0",
     "compression": "^1.7.4",
+    "drizzle-kit": "^0.17.0",
     "eslint": "8.36.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-import-resolver-node": "^0.3.7",
@@ -57,6 +59,8 @@
   "dependencies": {
     "@prisma/client": "4.11.0",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.0"
+    "drizzle-orm": "^0.22.0",
+    "jsonwebtoken": "^9.0.0",
+    "pg": "^8.10.0"
   }
 }
