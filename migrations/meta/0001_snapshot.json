@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "f1cb578e-21c8-4513-85ec-1662cc53ac5e",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "5b482973-36a3-476c-a8b8-0b67a4364899",
+  "prevId": "f1cb578e-21c8-4513-85ec-1662cc53ac5e",
   "tables": {
     "passwords": {
       "name": "passwords",
@@ -43,6 +43,19 @@
       "name": "todos",
       "schema": "",
       "columns": {
+        "complete": {
+          "name": "complete",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
         "id": {
           "name": "id",
           "type": "uuid",
@@ -55,20 +68,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "complete": {
-          "name": "complete",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
@@ -106,12 +105,12 @@
       "name": "users",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "default": "now()"
         },
         "email": {
           "name": "email",
@@ -119,12 +118,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
           "notNull": true,
-          "default": "now()"
+          "default": "gen_random_uuid()"
         },
         "updated_at": {
           "name": "updated_at",

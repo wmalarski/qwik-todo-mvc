@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { eq } from "drizzle-orm/expressions";
 import type { ProtectedRequestContext, RequestContext } from "./context";
 
 type GetCurrentUser = {
@@ -6,7 +7,12 @@ type GetCurrentUser = {
 };
 
 export const getCurrentUser = ({ ctx }: GetCurrentUser) => {
-  return ctx.prisma.user.findUnique({ where: { id: ctx.session.userId } });
+  return ctx.db
+    .select()
+    .from(ctx.schema.users)
+    .where(eq(ctx.schema.users.id, ctx.session.userId))
+    .limit(1)
+    .then((r) => r[0]);
 };
 
 type GetUser = {
@@ -15,7 +21,12 @@ type GetUser = {
 };
 
 export const getUser = ({ ctx, email }: GetUser) => {
-  return ctx.prisma.user.findUnique({ where: { email } });
+  return ctx.db
+    .select()
+    .from(ctx.schema.users)
+    .where(eq(ctx.schema.users.email, email))
+    .limit(1)
+    .then((r) => r[0]);
 };
 
 type CreateUser = {
@@ -27,16 +38,17 @@ type CreateUser = {
 export const createUser = async ({ ctx, email, password }: CreateUser) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  return ctx.prisma.user.create({
-    data: {
-      email,
-      password: {
-        create: {
-          hash: hashedPassword,
-        },
-      },
-    },
+  const user = await ctx.db
+    .insert(ctx.schema.users)
+    .values({ email })
+    .returning();
+
+  await ctx.db.insert(ctx.schema.passwords).values({
+    hash: hashedPassword,
+    userId: user[0].id,
   });
+
+  return user;
 };
 
 type VerifyLogin = {
@@ -46,26 +58,29 @@ type VerifyLogin = {
 };
 
 export const verifyLogin = async ({ ctx, email, password }: VerifyLogin) => {
-  const userWithPassword = await ctx.prisma.user.findUnique({
-    include: { password: true },
-    where: { email },
-  });
+  const userWithPassword = await ctx.db
+    .select()
+    .from(ctx.schema.users)
+    .leftJoin(
+      ctx.schema.passwords,
+      eq(ctx.schema.users.id, ctx.schema.passwords.userId)
+    )
+    .where(eq(ctx.schema.users.email, email))
+    .limit(1)
+    .then((r) => r[0]);
 
-  if (!userWithPassword || !userWithPassword.password) {
+  if (!userWithPassword || !userWithPassword.passwords?.hash) {
     return null;
   }
 
   const isValid = await bcrypt.compare(
     password,
-    userWithPassword.password.hash
+    userWithPassword.passwords.hash
   );
 
   if (!isValid) {
     return null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { password: _password, ...userWithoutPassword } = userWithPassword;
-
-  return userWithoutPassword;
+  return userWithPassword.users;
 };

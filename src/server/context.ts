@@ -1,16 +1,24 @@
 import type { RequestEventCommon } from "@builder.io/qwik-city";
+import type { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { db } from "~/db/db";
+import { passwords, todos, users } from "~/db/schema";
 import { paths } from "~/utils/paths";
 import { getSession, type Session } from "./auth";
-import { prisma, type DbPrismaClient } from "./db";
 
 export type RequestContext = {
-  prisma: DbPrismaClient;
+  db: NodePgDatabase;
+  schema: {
+    passwords: typeof passwords;
+    todos: typeof todos;
+    users: typeof users;
+  };
   session: Session | null;
 };
 
 export type ProtectedRequestContext = {
-  prisma: DbPrismaClient;
+  db: NodePgDatabase;
   session: Session;
+  schema: RequestContext["schema"];
 };
 
 const getRequestSession = (event: RequestEventCommon): Session | null => {
@@ -27,7 +35,7 @@ export const getRequestContext = (
   event: RequestEventCommon
 ): RequestContext => {
   const session = getRequestSession(event);
-  return { prisma, session };
+  return { db, schema: { passwords, todos, users }, session };
 };
 
 export const getProtectedRequestContext = (
@@ -39,5 +47,5 @@ export const getProtectedRequestContext = (
     throw event.redirect(302, paths.signIn);
   }
 
-  return { prisma, session };
+  return { db, schema: { passwords, todos, users }, session };
 };

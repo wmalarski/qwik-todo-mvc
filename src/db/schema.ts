@@ -1,19 +1,19 @@
 import {
   boolean,
-  InferModel,
   pgTable,
   text,
   timestamp,
   uuid,
   varchar,
+  type InferModel,
 } from "drizzle-orm/pg-core";
 
 export type UpdateModel<T extends { id: string }> = Partial<T> & { id: string };
 
 export const users = pgTable("users", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  email: text("email").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  email: text("email").notNull(),
+  id: uuid("id").defaultRandom().primaryKey(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -33,10 +33,10 @@ export type InsertPassword = InferModel<typeof passwords, "insert">;
 export type SecurePassword = Omit<Password, "hash">;
 
 export const todos = pgTable("todos", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  title: text("title").notNull(),
   complete: boolean("complete").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: text("title").notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   userId: varchar("user_id")
     .references(() => users.id)

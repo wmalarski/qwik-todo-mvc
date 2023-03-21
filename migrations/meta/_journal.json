@@ -1,1 +1,18 @@
-{"version":"5","dialect":"pg","entries":[]}
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1679427108779,
+      "tag": "0000_quiet_vapor"
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1679427195248,
+      "tag": "0001_colorful_grandmaster"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { and, eq } from "drizzle-orm/expressions";
 import type { ProtectedRequestContext } from "./context";
 
 type CreateTodo = {
@@ -6,13 +7,10 @@ type CreateTodo = {
 };
 
 export const createTodo = ({ ctx, title }: CreateTodo) => {
-  return ctx.prisma.todo.create({
-    data: {
-      complete: false,
-      title,
-      userId: ctx.session.userId,
-    },
-  });
+  return ctx.db
+    .insert(ctx.schema.todos)
+    .values({ complete: false, title, userId: ctx.session.userId })
+    .returning();
 };
 
 type ToggleTodo = {
@@ -22,10 +20,16 @@ type ToggleTodo = {
 };
 
 export const toggleTodo = ({ ctx, id, complete }: ToggleTodo) => {
-  return ctx.prisma.todo.updateMany({
-    data: { complete },
-    where: { id, userId: ctx.session.userId },
-  });
+  return ctx.db
+    .update(ctx.schema.todos)
+    .set({ complete })
+    .where(
+      and(
+        eq(ctx.schema.todos.id, id),
+        eq(ctx.schema.todos.userId, ctx.session.userId)
+      )
+    )
+    .returning();
 };
 
 type CompleteAllTodos = {
@@ -34,10 +38,11 @@ type CompleteAllTodos = {
 };
 
 export const completeAllTodos = ({ ctx, complete }: CompleteAllTodos) => {
-  return ctx.prisma.todo.updateMany({
-    data: { complete },
-    where: { userId: ctx.session.userId },
-  });
+  return ctx.db
+    .update(ctx.schema.todos)
+    .set({ complete })
+    .where(eq(ctx.schema.todos.userId, ctx.session.userId))
+    .returning();
 };
 
 type UpdateTodo = {
@@ -47,10 +52,16 @@ type UpdateTodo = {
 };
 
 export const updateTodo = ({ ctx, id, title }: UpdateTodo) => {
-  return ctx.prisma.todo.updateMany({
-    data: { title },
-    where: { id, userId: ctx.session.userId },
-  });
+  return ctx.db
+    .update(ctx.schema.todos)
+    .set({ title })
+    .where(
+      and(
+        eq(ctx.schema.todos.id, id),
+        eq(ctx.schema.todos.userId, ctx.session.userId)
+      )
+    )
+    .returning();
 };
 
 type DeleteTodo = {
@@ -59,9 +70,14 @@ type DeleteTodo = {
 };
 
 export const deleteTodo = ({ ctx, id }: DeleteTodo) => {
-  return ctx.prisma.todo.deleteMany({
-    where: { id, userId: ctx.session.userId },
-  });
+  return ctx.db
+    .delete(ctx.schema.todos)
+    .where(
+      and(
+        eq(ctx.schema.todos.id, id),
+        eq(ctx.schema.todos.userId, ctx.session.userId)
+      )
+    );
 };
 
 type DeleteCompletedTodos = {
@@ -69,9 +85,14 @@ type DeleteCompletedTodos = {
 };
 
 export const deleteCompletedTodos = ({ ctx }: DeleteCompletedTodos) => {
-  return ctx.prisma.todo.deleteMany({
-    where: { complete: true, userId: ctx.session.userId },
-  });
+  return ctx.db
+    .delete(ctx.schema.todos)
+    .where(
+      and(
+        eq(ctx.schema.todos.complete, true),
+        eq(ctx.schema.todos.userId, ctx.session.userId)
+      )
+    );
 };
 
 export type FilterKind = "active" | "complete" | "all";
@@ -82,14 +103,20 @@ type FindTodos = {
 };
 
 export const findTodos = ({ ctx, filter }: FindTodos) => {
-  const complete =
-    filter === "active" ? false : filter === "complete" ? true : undefined;
+  const userEq = eq(ctx.schema.todos.userId, ctx.session.userId);
 
-  return ctx.prisma.todo.findMany({
-    orderBy: { createdAt: "desc" },
-    select: { complete: true, createdAt: true, id: true, title: true },
-    where: { complete, userId: ctx.session.userId },
-  });
+  const where =
+    filter === "active"
+      ? and(eq(ctx.schema.todos.complete, false), userEq)
+      : filter === "complete"
+      ? and(eq(ctx.schema.todos.complete, true), userEq)
+      : userEq;
+
+  return ctx.db
+    .select()
+    .from(ctx.schema.todos)
+    .where(where)
+    .orderBy(ctx.schema.todos.createdAt);
 };
 
 type CountTodos = {
@@ -97,11 +124,14 @@ type CountTodos = {
 };
 
 export const countTodos = async ({ ctx }: CountTodos) => {
-  const result = await ctx.prisma.todo.groupBy({
-    _count: { complete: true },
-    by: ["complete"],
-    where: { userId: ctx.session.userId },
-  });
+  const result = await ctx.db
+    .select({
+      complete: ctx.schema.todos.complete,
+      s: ctx.schema.todos.complete,
+    })
+    .from(ctx.schema.todos)
+    .where(eq(ctx.schema.todos.userId, ctx.session.userId))
+    .groupBy(ctx.schema.todos.complete);
 
   const all = result.reduce((prev, curr) => {
     return prev + curr._count.complete;
