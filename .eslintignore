@@ -36,3 +36,6 @@ pnpm-lock.yaml
 package-lock.json
 yarn.lock
 .eslintrc.cjs
+scripts/migrate.mjs
+scripts/migrate.js
+scripts/migrate.ts

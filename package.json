@@ -19,7 +19,10 @@
     "lint": "eslint \"src/**/*.ts*\"",
     "preview": "qwik build preview && vite preview --open",
     "start": "vite --open --mode ssr",
-    "qwik": "qwik"
+    "qwik": "qwik",
+    "db:up": "drizzle-kit up:pg",
+    "db:drop": "drizzle-kit drop:pg",
+    "db:push": "npx tsx scripts/migrate.ts"
   },
   "devDependencies": {
     "@builder.io/qwik": "0.23.0",
@@ -29,7 +32,7 @@
     "@types/eslint": "8.21.3",
     "@types/express": "4.17.17",
     "@types/jsonwebtoken": "^9.0.1",
-    "@types/node": "^18.15.3",
+    "@types/node": "^18.15.5",
     "@types/node-fetch": "latest",
     "@types/pg": "^8.6.6",
     "@typescript-eslint/eslint-plugin": "5.56.0",
@@ -56,6 +59,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.3",
     "drizzle-orm": "^0.22.0",
     "jsonwebtoken": "^9.0.0",
     "pg": "^8.10.0"

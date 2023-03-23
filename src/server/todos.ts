@@ -1,4 +1,5 @@
 import { and, eq } from "drizzle-orm/expressions";
+import { sql } from "drizzle-orm/sql";
 import type { ProtectedRequestContext } from "./context";
 
 type CreateTodo = {
@@ -127,20 +128,20 @@ export const countTodos = async ({ ctx }: CountTodos) => {
   const result = await ctx.db
     .select({
       complete: ctx.schema.todos.complete,
-      s: ctx.schema.todos.complete,
+      count: sql<number>`count(${ctx.schema.todos.complete})`,
     })
     .from(ctx.schema.todos)
     .where(eq(ctx.schema.todos.userId, ctx.session.userId))
     .groupBy(ctx.schema.todos.complete);
 
   const all = result.reduce((prev, curr) => {
-    return prev + curr._count.complete;
+    return prev + curr.count;
   }, 0);
 
   return result.reduce<Record<FilterKind, number>>(
     (prev, curr) => {
       const key = curr.complete ? "complete" : "active";
-      prev[key] = curr._count.complete;
+      prev[key] = curr.count;
       return prev;
     },
     { active: 0, all, complete: 0 }

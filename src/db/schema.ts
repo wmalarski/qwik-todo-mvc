@@ -23,7 +23,7 @@ export type UpdateUser = UpdateModel<InferModel<typeof users>>;
 
 export const passwords = pgTable("passwords", {
   hash: varchar("hash").notNull(),
-  userId: varchar("user_id")
+  userId: uuid("user_id")
     .references(() => users.id)
     .notNull(),
 });
@@ -38,7 +38,7 @@ export const todos = pgTable("todos", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: text("title").notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  userId: varchar("user_id")
+  userId: uuid("user_id")
     .references(() => users.id)
     .notNull(),
 });
