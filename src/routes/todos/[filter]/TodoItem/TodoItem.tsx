@@ -6,8 +6,8 @@ import {
   z,
   zod$,
 } from "@builder.io/qwik-city";
-import type { Todo } from "@prisma/client";
 import { CompleteIcon, IncompleteIcon } from "~/components/Icons/Icons";
+import type { Todo } from "~/db/schema";
 import { getProtectedRequestContext } from "~/server/context";
 import { deleteTodo, toggleTodo, updateTodo } from "~/server/todos";
 import type { useCompleteAllAction, useDeleteCompletedAction } from "..";

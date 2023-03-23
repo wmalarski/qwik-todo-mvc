@@ -38,14 +38,16 @@ type CreateUser = {
 export const createUser = async ({ ctx, email, password }: CreateUser) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await ctx.db
+  const users = await ctx.db
     .insert(ctx.schema.users)
     .values({ email })
     .returning();
 
+  const user = users[0];
+
   await ctx.db.insert(ctx.schema.passwords).values({
     hash: hashedPassword,
-    userId: user[0].id,
+    userId: user.id,
   });
 
   return user;
