@@ -1,3 +1,4 @@
+import type { InferModel } from "drizzle-orm";
 import {
   boolean,
   pgTable,
@@ -5,7 +6,6 @@ import {
   timestamp,
   uuid,
   varchar,
-  type InferModel,
 } from "drizzle-orm/pg-core";
 
 export type UpdateModel<T extends { id: string }> = Partial<T> & { id: string };

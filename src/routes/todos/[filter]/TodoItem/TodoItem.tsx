@@ -94,7 +94,7 @@ export const TodoItem = component$<Props>((props) => {
           onBlur$={(event) => {
             const value = event.target.value;
             if (props.todo.title !== value) {
-              updateTodo.run({ id: props.todo.id, title: value });
+              updateTodo.submit({ id: props.todo.id, title: value });
             }
           }}
           aria-invalid={!!updateTodo.value?.fieldErrors?.title}
