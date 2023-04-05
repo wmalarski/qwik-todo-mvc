@@ -2,6 +2,7 @@ import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import {
   Form,
   routeAction$,
+  routeLoader$,
   z,
   zod$,
   type DocumentHead,
@@ -11,6 +12,16 @@ import { getRequestContext } from "~/server/context";
 import { verifyLogin } from "~/server/user";
 import { paths } from "~/utils/paths";
 import styles from "./index.css?inline";
+
+export const useSessionLoader = routeLoader$((event) => {
+  const ctx = getRequestContext(event);
+
+  if (ctx.session) {
+    event.redirect(302, paths.all);
+  }
+
+  return ctx.session;
+});
 
 export const useSignInAction = routeAction$(
   async (data, event) => {
@@ -38,6 +49,8 @@ export const useSignInAction = routeAction$(
 
 export default component$(() => {
   useStylesScoped$(styles);
+
+  useSessionLoader();
 
   const signIn = useSignInAction();
 

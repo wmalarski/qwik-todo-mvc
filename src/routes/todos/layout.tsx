@@ -1,10 +1,11 @@
 import { component$, Slot, useStylesScoped$ } from "@builder.io/qwik";
 import { Form, routeAction$ } from "@builder.io/qwik-city";
-import { deleteSession } from "~/server/auth";
+import { clearRequestSession, deleteSession } from "~/server/auth";
 import { paths } from "~/utils/paths";
 import styles from "./layout.css?inline";
 
 export const useSignOutAction = routeAction$((_data, event) => {
+  clearRequestSession(event);
   deleteSession(event);
 
   event.redirect(302, paths.signIn);

@@ -17,8 +17,8 @@ const options = {
   secure: env.NODE_ENV === "production",
 } as const;
 
-export const SESSION_COOKIE_KEY = "__session";
-export const SESSION_MAP_KEY = "__session";
+const SESSION_COOKIE_KEY = "__session";
+const SESSION_MAP_KEY = "__session";
 
 export const createSession = (event: RequestEventCommon, userId: string) => {
   const token = jwt.sign({ userId }, env.SESSION_SECRET, { expiresIn: "7d" });
@@ -59,4 +59,8 @@ export const getRequestSession = (
   const session = getSession(event);
   event.sharedMap.set(SESSION_MAP_KEY, { session });
   return session;
+};
+
+export const clearRequestSession = (event: RequestEventCommon) => {
+  event.sharedMap.set(SESSION_MAP_KEY, { session: null });
 };
