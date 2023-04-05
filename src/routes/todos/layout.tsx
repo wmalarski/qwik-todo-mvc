@@ -1,19 +1,8 @@
 import { component$, Slot, useStylesScoped$ } from "@builder.io/qwik";
-import { Form, routeAction$, routeLoader$ } from "@builder.io/qwik-city";
+import { Form, routeAction$ } from "@builder.io/qwik-city";
 import { deleteSession } from "~/server/auth";
-import { getRequestContext } from "~/server/context";
 import { paths } from "~/utils/paths";
 import styles from "./layout.css?inline";
-
-export const useSessionLoader = routeLoader$((event) => {
-  const ctx = getRequestContext(event);
-
-  if (!ctx.session) {
-    event.redirect(302, paths.signIn);
-  }
-
-  return ctx.session;
-});
 
 export const useSignOutAction = routeAction$((_data, event) => {
   deleteSession(event);
@@ -23,8 +12,6 @@ export const useSignOutAction = routeAction$((_data, event) => {
 
 export default component$(() => {
   useStylesScoped$(styles);
-
-  useSessionLoader();
 
   const signOut = useSignOutAction();
 

@@ -1,8 +1,8 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import {
   Form,
-  globalAction$,
   Link,
+  globalAction$,
   routeLoader$,
   useLocation,
   z,
@@ -18,10 +18,12 @@ import {
   findTodos,
 } from "~/server/todos";
 import { paths } from "~/utils/paths";
-import styles from "./index.css?inline";
 import { TodoItem } from "./TodoItem/TodoItem";
+import styles from "./index.css?inline";
 
 export const useTodosLoader = routeLoader$((event) => {
+  const ctx = getProtectedRequestContext(event);
+
   const result = z
     .object({
       filter: z.union([
@@ -36,8 +38,6 @@ export const useTodosLoader = routeLoader$((event) => {
     event.redirect(302, paths.all);
     return;
   }
-
-  const ctx = getProtectedRequestContext(event);
 
   return findTodos({ ctx, filter: result.data.filter });
 });

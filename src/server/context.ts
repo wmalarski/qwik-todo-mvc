@@ -3,7 +3,7 @@ import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { db } from "~/db/db";
 import { passwords, todos, users } from "~/db/schema";
 import { paths } from "~/utils/paths";
-import { getSession, type Session } from "./auth";
+import { getRequestSession, type Session } from "./auth";
 
 export type RequestContext = {
   db: NodePgDatabase;
@@ -19,16 +19,6 @@ export type ProtectedRequestContext = {
   db: NodePgDatabase;
   session: Session;
   schema: RequestContext["schema"];
-};
-
-const getRequestSession = (event: RequestEventCommon): Session | null => {
-  const value = event.sharedMap.get("session");
-  if (value) {
-    return value.session;
-  }
-  const session = getSession(event);
-  event.sharedMap.set("session", { session });
-  return session;
 };
 
 export const getRequestContext = (

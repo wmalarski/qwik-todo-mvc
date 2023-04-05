@@ -17,28 +17,24 @@ const options = {
   secure: env.NODE_ENV === "production",
 } as const;
 
-export const USER_SESSION_KEY = "__session";
+export const SESSION_COOKIE_KEY = "__session";
+export const SESSION_MAP_KEY = "__session";
 
 export const createSession = (event: RequestEventCommon, userId: string) => {
   const token = jwt.sign({ userId }, env.SESSION_SECRET, { expiresIn: "7d" });
 
-  event.cookie.set(USER_SESSION_KEY, token, {
+  event.cookie.set(SESSION_COOKIE_KEY, token, {
     ...options,
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
-  // somehow cookie.set is not working right now
-  event.headers.set("Set-Cookie", event.cookie.headers()[0]);
 };
 
 export const deleteSession = (event: RequestEventCommon) => {
-  event.cookie.delete(USER_SESSION_KEY, options);
-
-  // somehow cookie.delete is not working right now
-  event.headers.set("Set-Cookie", event.cookie.headers()[0]);
+  event.cookie.delete(SESSION_COOKIE_KEY, options);
 };
 
-export const getSession = (event: RequestEventCommon): Session | null => {
-  const token = event.cookie.get(USER_SESSION_KEY)?.value;
+const getSession = (event: RequestEventCommon): Session | null => {
+  const token = event.cookie.get(SESSION_COOKIE_KEY)?.value;
 
   if (!token) {
     return null;
@@ -51,4 +47,16 @@ export const getSession = (event: RequestEventCommon): Session | null => {
     deleteSession(event);
     return null;
   }
+};
+
+export const getRequestSession = (
+  event: RequestEventCommon
+): Session | null => {
+  const value = event.sharedMap.get(SESSION_MAP_KEY);
+  if (value) {
+    return value.session;
+  }
+  const session = getSession(event);
+  event.sharedMap.set(SESSION_MAP_KEY, { session });
+  return session;
 };
