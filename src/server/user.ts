@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { eq } from "drizzle-orm/expressions";
+import { eq } from "drizzle-orm";
 import type { ProtectedRequestContext, RequestContext } from "./context";
 
 type GetCurrentUser = {

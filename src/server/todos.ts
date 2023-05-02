@@ -1,5 +1,4 @@
-import { and, eq } from "drizzle-orm/expressions";
-import { sql } from "drizzle-orm/sql";
+import { and, eq, sql } from "drizzle-orm";
 import type { ProtectedRequestContext } from "./context";
 
 type CreateTodo = {
