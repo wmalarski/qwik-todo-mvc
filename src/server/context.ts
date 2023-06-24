@@ -1,6 +1,6 @@
 import type { RequestEventCommon } from "@builder.io/qwik-city";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { db } from "~/db/db";
+import { getDrizzle } from "~/db/db";
 import { passwords, todos, users } from "~/db/schema";
 import { paths } from "~/utils/paths";
 import { getRequestSession, type Session } from "./auth";
@@ -25,6 +25,7 @@ export const getRequestContext = (
   event: RequestEventCommon
 ): RequestContext => {
   const session = getRequestSession(event);
+  const db = getDrizzle(event);
   return { db, schema: { passwords, todos, users }, session };
 };
 
@@ -36,6 +37,8 @@ export const getProtectedRequestContext = (
   if (!session) {
     throw event.redirect(302, paths.signIn);
   }
+
+  const db = getDrizzle(event);
 
   return { db, schema: { passwords, todos, users }, session };
 };
