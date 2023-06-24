@@ -1,6 +1,6 @@
 import type { RequestEventCommon } from "@builder.io/qwik-city";
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import pg from "pg";
 import { serverEnv } from "~/server/env";
 
 declare global {
@@ -10,7 +10,7 @@ declare global {
 
 export const createDrizzle = (event: RequestEventCommon) => {
   const env = serverEnv(event);
-  const pool = new Pool({ connectionString: env.DATABASE_URL });
+  const pool = new pg.Pool({ connectionString: env.DATABASE_URL });
 
   return drizzle(pool);
 };
