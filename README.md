@@ -6,7 +6,7 @@
 
 - [x] Simple email+password authorization
 - [x] Cookie session management
-- [x] Prisma+Postgresql integration
+- [x] DrizzleORM+Postgresql integration
 - [x] Using `loader$` and `action$`(with `zod$` validation)
 - [x] Filtering todo list
 - [x] Listing and updating todos
