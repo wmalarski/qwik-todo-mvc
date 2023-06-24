@@ -20,7 +20,7 @@
 
 1. `pnpm i`
 2. create `.env` file based on `.env.example`
-3. `pnpm prisma db push`
+3. `pnpm db:push`
 4. `pnpm dev`
 
 ## Project Structure
